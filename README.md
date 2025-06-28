@@ -14,16 +14,18 @@ This project was collaboratively developed by [**Raghad Albeladi**](https://gith
 - GCC version 9.4.0 or newer (currently using 11.4.0 on Ubuntu 22.04)  
 - Operating System: **Ubuntu 22.04 LTS** (sandbox environment)  
 - `make` utility (optional but recommended)
-### 🔽 Clone the Repository
-```bash
-git clone https://github.com/RaghadAlbeladi1/holbertonschool-simple_shell.git
-cd holbertonschool-simple_shell
-```
+## Compilation / Installation
 Compilation
 All files are compiled on Ubuntu 22.04 LTS using:
 ```bash
 gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
 ```
+### 🔽 Clone the Repository
+```bash
+git clone https://github.com/RaghadAlbeladi1/holbertonschool-simple_shell.git
+cd holbertonschool-simple_shell
+```
+
 
 
 

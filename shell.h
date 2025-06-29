@@ -49,5 +49,5 @@ int run_command(char **args);
 
 int builtin_env(char **args);
 int builtin_exit(char **args);
-
+int handle_builtins(char **args, char **env);
 #endif 

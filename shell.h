@@ -45,5 +45,6 @@ char **split_command(char *command);
  * Return: Exit status of the executed command.
  */
 int run_command(char **args);
+int handle_builtins(char **args, char **env);
 
 #endif /* SHELL_H */

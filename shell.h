@@ -13,6 +13,7 @@
 
 extern char **environ;
 
+void print_prompt(void);
 void shell_loop(void);
 char *read_command(void);
 char **split_command(char *command);

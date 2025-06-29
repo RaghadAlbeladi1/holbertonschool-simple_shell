@@ -12,9 +12,11 @@ int main(void)
 }
 
 /**
- * shell_loop - The main loop of the shell.
- * Continuously prompts the user for input, reads the command,
- * parses it into arguments, and executes it.
+ * shell_loop - The main REPL loop of the shell.
+ *
+ * Description: Repeatedly prints a prompt (only when running
+ * in interactive mode), reads a full line from stdin, tokenizes
+ * it, then executes the resulting command.
  */
 void shell_loop(void)
 {
@@ -23,7 +25,8 @@ void shell_loop(void)
 
 	while (1)
 	{
-		print_prompt();
+		if (isatty(STDIN_FILENO))
+			print_prompt();
 
 		command = read_command();
 		if (command == NULL)

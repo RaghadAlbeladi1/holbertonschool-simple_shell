@@ -13,10 +13,37 @@
 
 extern char **environ;
 
+/**
+ * print_prompt - Prints the shell prompt.
+ */
 void print_prompt(void);
+
+/**
+ * shell_loop - Main loop executing the shell until EOF.
+ */
 void shell_loop(void);
+
+/**
+ * read_command - Reads a line of input from stdin.
+ *
+ * Return: Pointer to the command string, or NULL on EOF.
+ */
 char *read_command(void);
+
+/**
+ * split_command - Splits a command into tokens.
+ * @command: The command string.
+ *
+ * Return: NULL‑terminated array of tokens.
+ */
 char **split_command(char *command);
+
+/**
+ * run_command - Forks and executes a command.
+ * @args: NULL‑terminated array of arguments.
+ *
+ * Return: Exit status of the executed command.
+ */
 int run_command(char **args);
 
-#endif
+#endif /* SHELL_H */

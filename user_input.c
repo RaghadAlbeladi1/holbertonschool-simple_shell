@@ -1,62 +1,64 @@
 #include "shell.h"
-#include <string.h>
-#include <stdlib.h>
 
 /**
- * read_command - Reads a line of input from stdin.
- * Return: Pointer to the command string, or NULL on EOF.
+ * read_command - Reads a line from stdin, strips the newline.
+ * Return: pointer to malloc’d string, or NULL on EOF.
  */
 char *read_command(void)
 {
-char *command = NULL;
-size_t len = 0;
-if (getline(&command, &len, stdin) == -1)
-{
-free(command);
-return (NULL);
-}
+	char *command = NULL;
+	size_t len = 0;
+	ssize_t nread;
 
-command[strcspn(command, "\n")] = '\0';
-if (command[0] == '\0' ||
-strspn(command, " \t") == strlen(command))
-{
-free(command);
-return (strdup(""));
-}
-return (command);
+	nread = getline(&command, &len, stdin);
+	if (nread == -1)
+	{
+		free(command);
+		return (NULL);
+	}
+
+	/* Remove trailing newline */
+	command[strcspn(command, "\n")] = '\0';
+
+	/* If empty or only spaces/tabs, return an empty buffer */
+	if (command[0] == '\0' ||
+		strspn(command, " \t") == strlen(command))
+	{
+		free(command);
+		return (strdup(""));
+	}
+
+	return (command);
 }
 
 /**
- * split_command - Splits a command into tokens (handles arguments).
+ * split_command - Splits a command string into tokens.
  * @command: The command string.
- * Return: NULL~@~Qterminated array of tokens.
+ * Return: NULL terminated array of tokens.
  */
 char **split_command(char *command)
 {
-int bufsize = 64, pos = 0;
-char **tokens = malloc(sizeof(char *) * bufsize);
-char *token;
-if (!tokens)
-exit(EXIT_FAILURE);
-token = strtok(command, SHELL_TOK_DELIM);
-while (token)
-{
-tokens[pos++] = token;
+	int bufsize = 64, pos = 0;
+	char **tokens = malloc(sizeof(char *) * bufsize);
+	char *token;
 
-if (pos >= bufsize)
-{
-bufsize *= 2;
-char **tmp = realloc(tokens, sizeof(char *) * bufsize);
-if (!tmp)
-{
-free(tokens);
-exit(EXIT_FAILURE);
+	if (tokens == NULL)
+		exit(EXIT_FAILURE);
 
+	token = strtok(command, SHELL_TOK_DELIM);
+	while (token)
+	{
+		tokens[pos++] = token;
+		if (pos >= bufsize)
+		{
+			bufsize *= 2;
+			tokens = realloc(tokens, sizeof(char *) * bufsize);
+			if (tokens == NULL)
+				exit(EXIT_FAILURE);
+		}
+		token = strtok(NULL, SHELL_TOK_DELIM);
+	}
+	tokens[pos] = NULL;
+	return (tokens);
 }
-tokens = tmp;
-}
-token = strtok(NULL, SHELL_TOK_DELIM);
-}
-tokens[pos] = NULL;
-return (tokens);
-}
+

@@ -12,23 +12,26 @@ int main(void)
 }
 
 /**
- * shell_loop - Main loop reading and executing commands.
+ * shell_loop - The main loop of the shell.
+ * Continuously prompts the user for input, reads the command,
+ * parses it into arguments, and executes it.
  */
 void shell_loop(void)
 {
-	char *command;
-	char **args;
-	int status = 1;
+	char *command = NULL;
+	char **args = NULL;
 
-	while (status)
+	while (1)
 	{
 		print_prompt();
+
 		command = read_command();
-		if (command == NULL)  /* Ctrl+D */
+		if (command == NULL)
 		{
 			putchar('\n');
 			break;
 		}
+
 		if (command[0] == '\0')
 		{
 			free(command);
@@ -36,16 +39,7 @@ void shell_loop(void)
 		}
 
 		args = split_command(command);
-
-		if (args[0] == NULL)
-		{
-			free(args);
-			free(command);
-			continue;
-		}
-
-
-		status = run_command(args);
+		run_command(args);
 
 		free(args);
 		free(command);

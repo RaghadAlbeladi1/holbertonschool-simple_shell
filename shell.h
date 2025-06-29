@@ -9,7 +9,8 @@
 #include <sys/wait.h>
 
 #define SHELL_RL_BUFSIZE 1024
-#define SHELL_TOK_DELIM " \t\r\n\a"
+#define SHELL_TOK_DELIM  " \t\r\n"
+
 
 extern char **environ;
 
@@ -46,4 +47,7 @@ char **split_command(char *command);
  */
 int run_command(char **args);
 
-#endif /* SHELL_H */
+int builtin_env(char **args);
+int builtin_exit(char **args);
+int handle_builtins(char **args, char **env);
+#endif 

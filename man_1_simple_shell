@@ -1,0 +1,76 @@
+.TH simple_shell 1 "June 2025" "v1.0" "Simple Shell Manual"
+
+.SH NAME
+.B simple_shell
+\- a simple UNIX command‑line interpreter
+
+.SH SYNOPSIS
+.B simple_shell
+.RI [ scriptfile ]
+
+.SH DESCRIPTION
+.PP
+.B simple_shell
+is a minimal shell written in C. It reads user input, parses commands,
+and executes them using the system's built‑in functionalities.
+
+.PP
+The shell works in two modes:
+.TP
+.B Interactive
+Displays a prompt and waits for input.
+.TP
+.B Non‑interactive
+Reads commands from standard input or a file.
+
+.SH FEATURES
+.TP
+.B Executes commands
+with or without arguments.
+.TP
+.B PATH search
+Automatically locates executables in the directories listed in
+the \fI$PATH\fR environment variable.
+.TP
+.B Built‑in commands
+.RS
+.IP \fBexit\fR 4
+Exit the shell.
+.IP \fBenv\fR 4
+Print environment variables.
+.RE
+.TP
+.B Error handling
+Prints “\fBcommand not found\fR” messages as shown below.
+
+.SH USAGE
+.PP
+.B Interactive mode
+.EX
+$ ./simple_shell
+($) /bin/ls
+file1.c  file2.c  simple_shell
+($) exit
+.EE
+.PP
+.B Non‑interactive mode
+.EX
+$ echo "/bin/ls" \| ./simple_shell
+file1.c  file2.c  simple_shell
+.EE
+
+.SH ERROR HANDLING
+.EX
+./simple_shell: 1: command_name: not found
+.EE
+
+.SH EXIT STATUS
+.B simple_shell
+returns 0 on success and a non‑zero value on failure.
+
+.SH AUTHORS
+Raghad Albeladi, Najwa Aljunaidel, Bushra Alotaibi  
+
+.SH SEE ALSO
+.BR sh (1),
+.BR bash (1)

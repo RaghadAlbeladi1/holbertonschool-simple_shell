@@ -1,47 +1,44 @@
 #include "shell.h"
 
 /**
- * main - Entry point for simple shell program.
- * Return: Always EXIT_SUCCESS.
- */
-int main(void)
+
+* main - Entry point for the shell
+* @argc: argument count (unused)
+* @argv: argument vector (unused)
+* @env: environment variables
+*
+* Return: 0 on success
+*/
+int main(int argc, char **argv, char **env)
 {
-	shell_loop();
-	return (EXIT_SUCCESS);
+char *line;
+char **args;
+
+(void)argc;
+(void)argv;
+
+while (1)
+{
+display_prompt();
+line = get_input();
+
+if (line == NULL)
+{
+write(STDOUT_FILENO, "\n", 1);
+break;
 }
 
-/**
- * shell_loop - Main shell processing loop (REPL).
- *
- * Description: Handles:
- * - Prompt display
- * - Command reading
- * - Command execution
- * - Memory cleanup
- */
-void shell_loop(void)
+args = tokenize_input(line);
+if (args[0] != NULL)
 {
-	char *line = NULL;
-	char **args = NULL;
-	int status = 1;
-
-	while (status)
-	{
-		print_prompt();
-		line = read_line();
-		if (!line)
-		{
-			if (isatty(STDIN_FILENO))
-				write(STDOUT_FILENO, "\n", 1);
-			break;
-		}
-
-		args = parse_line(line);
-		if (args)
-		{
-			status = execute(args);
-			free(args);
-		}
-		free(line);
-	}
+if (!handle_builtins(args, env))
+execute_command(args, env);
 }
+
+free(args);
+free(line);
+
+}
+return (0);
+}
+

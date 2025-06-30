@@ -5,14 +5,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <errno.h>
 
-/* Constants */
-#define BUFSIZE 64
-#define DELIM " \t\n"
+#include <sys/types.h>
+#include <sys/wait.h>
+
+/* Function Prototypes */
+void display_prompt(void);
+char *get_input(void);
+char **tokenize_input(char *line);
+int handle_builtins(char **args, char **env);
+void execute_command(char **args, char **env);
+char *find_command(char *command, char **env);
+
 
 /* Environment */
 extern char **environ;

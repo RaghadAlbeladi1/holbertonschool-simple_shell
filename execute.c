@@ -49,6 +49,7 @@ return NULL;
 }
 
 /**
+
 * execute_command - execute command by forking and calling execve
 * @args: command arguments
 * @env: environment variables
@@ -78,6 +79,7 @@ perror("fork failed");
 if (cmd_path != args[0])
 free(cmd_path);
 return;
+
 }
 
 if (pid == 0)

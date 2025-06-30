@@ -1,6 +1,7 @@
 #include "shell.h"
 
 /**
+
 * main - Entry point for the shell
 * @argc: argument count (unused)
 * @argv: argument vector (unused)
@@ -36,6 +37,7 @@ execute_command(args, env);
 
 free(args);
 free(line);
+
 }
 return (0);
 }

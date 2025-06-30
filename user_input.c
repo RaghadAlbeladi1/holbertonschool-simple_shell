@@ -1,6 +1,7 @@
 #include "shell.h"
 
 /**
+
 * get_input - reads a line of input from the user
 *
 * Return: pointer to the input string, or NULL on EOF or error
@@ -53,6 +54,7 @@ if (!tmp)
 free(tokens);
 perror("realloc failed");
 exit(EXIT_FAILURE);
+
 }
 tokens = tmp;
 }

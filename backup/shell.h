@@ -1,7 +1,6 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-/* Standard headers */
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -10,18 +9,20 @@
 #include <sys/types.h>
 #include <errno.h>
 
-/* Constants */
-#define BUFSIZE 64
+#define BUFSIZE 1024
 #define DELIM " \t\n"
 
-/* Environment */
 extern char **environ;
 
 /* Function prototypes */
-void shell_loop(void);
 char *read_line(void);
 char **parse_line(char *line);
 int execute(char **args);
 void print_prompt(void);
+int launch(char **args);
 
-#endif /* SHELL_H */
+/* Built-in functions */
+int shell_exit(char **args);
+int shell_env(char **args);
+
+#endif

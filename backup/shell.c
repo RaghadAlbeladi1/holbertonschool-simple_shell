@@ -1,8 +1,8 @@
 #include "shell.h"
 
 /**
- * main - Entry point for simple shell program.
- * Return: Always EXIT_SUCCESS.
+ * main - Entry point for simple shell
+ * Return: EXIT_SUCCESS on success
  */
 int main(void)
 {
@@ -11,13 +11,7 @@ int main(void)
 }
 
 /**
- * shell_loop - Main shell processing loop (REPL).
- *
- * Description: Handles:
- * - Prompt display
- * - Command reading
- * - Command execution
- * - Memory cleanup
+ * shell_loop - Main shell processing loop
  */
 void shell_loop(void)
 {
@@ -25,20 +19,19 @@ void shell_loop(void)
 	char **args = NULL;
 	int status = 1;
 
-	while (status)
-	{
-		print_prompt();
+	while (status) {
+		if (isatty(STDIN_FILENO))
+			print_prompt();
+
 		line = read_line();
-		if (!line)
-		{
+		if (!line) {
 			if (isatty(STDIN_FILENO))
 				write(STDOUT_FILENO, "\n", 1);
 			break;
 		}
 
 		args = parse_line(line);
-		if (args)
-		{
+		if (args) {
 			status = execute(args);
 			free(args);
 		}

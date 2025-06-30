@@ -14,6 +14,7 @@ char *get_input(void);
 char **tokenize_input(char *line);
 int handle_builtins(char **args, char **env);
 void execute_command(char **args, char **env);
+char *find_command(char *command, char **env);
 
 #endif /* SHELL_H */
 

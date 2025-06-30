@@ -1,10 +1,10 @@
+
 #include "shell.h"
 
 /**
- * print_prompt - Prints the shell prompt.
+ * display_prompt - prints the shell prompt
  */
-void print_prompt(void)
+void display_prompt(void)
 {
-printf("$ ");
-fflush(stdout);
+ write(STDOUT_FILENO, "$ ", 2);
 }

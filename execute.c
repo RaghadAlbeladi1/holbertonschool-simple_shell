@@ -1,38 +1,33 @@
+
 #include "shell.h"
 
 /**
- * run_command - Forks and executes a command using execvp.
- * @args: Null-terminated array of command and its arguments.
- *
- * Return: Always returns 1 to continue the shell loop.
+ * execute_command - creates a child process and executes the command
+ * @args: array of arguments
+ * @env: environment variables
  */
-int run_command(char **args)
+void execute_command(char **args, char **env)
 {
-	pid_t pid;
-	int child_status;
+ pid_t pid;
+ int status;
 
-	if (args[0] == NULL)
-		return (1);
+ pid = fork();
+ if (pid == -1)
+ {
+  perror("fork failed");
+  return;
+ }
 
-	pid = fork();
-	if (pid == 0)
-	{
-		if (execvp(args[0], args) == -1)
-		{
-			perror("simple_shell");
-			exit(EXIT_FAILURE);
-		}
-	}
-	else if (pid < 0)
-	{
-		perror("simple_shell");
-	}
-	else
-	{
-		if (waitpid(pid, &child_status, 0) == -1)
-			perror("simple_shell");
-	}
-
-	return (1);
+ if (pid == 0)
+ {
+  if (execve(args[0], args, env) == -1)
+  {
+   perror("execve failed");
+   exit(EXIT_FAILURE);
+  }
+ }
+ else
+ {
+  waitpid(pid, &status, 0);
+ }
 }
-

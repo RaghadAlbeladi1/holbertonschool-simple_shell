@@ -11,8 +11,8 @@ This project was collaboratively developed by [**Raghad Albeladi**](https://gith
 
 
 ## Requirements
-- GCC version 9.4.0 or newer (currently using 11.4.0 on Ubuntu 22.04)  
-- Operating System: **Ubuntu 22.04 LTS** (sandbox environment)  
+- GCC version 9.4.0 or newer (crrently using 11.4.0 on Ubuntu 22.04) 
+- Operating System: **Ubuntu 22.04 LTS** (sandbox environment) 
 - `make` utility (optional but recommended)
 ## Compilation / Installation
 Compilation

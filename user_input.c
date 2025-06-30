@@ -1,52 +1,57 @@
 #include "shell.h"
 
 /**
- * get_input - reads a line of input from the user
- *
- * Return: pointer to the input string
+ * read_line - Reads user input
+ * Return: Input string
  */
-char *get_input(void)
+char *read_line(void)
 {
- char *line = NULL;
- size_t len = 0;
- ssize_t read;
+    char *line = NULL;
+    size_t len = 0;
+    ssize_t nread;
 
- read = getline(&line, &len, stdin);
-
- if (read == -1)
- {
-  free(line);
-  return (NULL);
- }
-
- return (line);
+    nread = getline(&line, &len, stdin);
+    if (nread == -1)
+    {
+        free(line);
+        return (NULL);
+    }
+    return (line);
 }
 
 /**
- * tokenize_input - splits a line into tokens (command and arguments)
- * @line: the input string
- *
- * Return: pointer to array of strings (tokens)
+ * parse_line - Splits input into tokens
+ * @line: Input string
+ * Return: Token array
  */
-char **tokenize_input(char *line)
+char **parse_line(char *line)
 {
- char *token;
- char **args = malloc(64 * sizeof(char *));
- int i = 0;
+    int bufsize = BUFSIZE, pos = 0;
+    char **tokens = malloc(bufsize * sizeof(char *));
+    char *token;
 
- if (!args)
- {
-  perror("malloc failed");
-  exit(EXIT_FAILURE);
- }
+    if (!tokens)
+    {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
 
- token = strtok(line, " \n");
- while (token != NULL)
- {
-  args[i++] = token;
-  token = strtok(NULL, " \n");
- }
- args[i] = NULL;
-
- return (args);
+    token = strtok(line, DELIM);
+    while (token)
+    {
+        tokens[pos++] = token;
+        if (pos >= bufsize)
+        {
+            bufsize += BUFSIZE;
+            tokens = realloc(tokens, bufsize * sizeof(char *));
+            if (!tokens)
+            {
+                perror("realloc");
+                exit(EXIT_FAILURE);
+            }
+        }
+        token = strtok(NULL, DELIM);
+    }
+    tokens[pos] = NULL;
+    return (tokens);
 }

@@ -1,66 +1,52 @@
 #include "shell.h"
 
 /**
- * read_command - Reads a line from stdin and strips the newline.
+ * get_input - reads a line of input from the user
  *
- * Return: Pointer to the cleaned command string, or NULL on EOF.
+ * Return: pointer to the input string
  */
-char *read_command(void)
+char *get_input(void)
 {
-	char *command = NULL;
-	size_t len = 0;
-	ssize_t nread;
+ char *line = NULL;
+ size_t len = 0;
+ ssize_t read;
 
-	nread = getline(&command, &len, stdin);
-	if (nread == -1)
-	{
-		free(command);
-		return (NULL);
-	}
+ read = getline(&line, &len, stdin);
 
-	command[strcspn(command, "\n")] = '\0';
+ if (read == -1)
+ {
+  free(line);
+  return (NULL);
+ }
 
-	if (command[0] == '\0' ||
-	    strspn(command, " \t") == strlen(command))
-	{
-		free(command);
-		return (strdup(""));
-	}
-
-	return (command);
+ return (line);
 }
 
 /**
- * split_command - Splits a command string into tokens.
- * @command: The command string.
+ * tokenize_input - splits a line into tokens (command and arguments)
+ * @line: the input string
  *
- * Return: NULL-terminated array of tokens.
+ * Return: pointer to array of strings (tokens)
  */
-char **split_command(char *command)
+char **tokenize_input(char *line)
 {
-	int bufsize = 64, pos = 0;
-	char **tokens = malloc(sizeof(char *) * bufsize);
-	char *token;
+ char *token;
+ char **args = malloc(64 * sizeof(char *));
+ int i = 0;
 
-	if (!tokens)
-		exit(EXIT_FAILURE);
+ if (!args)
+ {
+  perror("malloc failed");
+  exit(EXIT_FAILURE);
+ }
 
-	token = strtok(command, SHELL_TOK_DELIM);
-	while (token)
-	{
-		tokens[pos++] = token;
+ token = strtok(line, " \n");
+ while (token != NULL)
+ {
+  args[i++] = token;
+  token = strtok(NULL, " \n");
+ }
+ args[i] = NULL;
 
-		if (pos >= bufsize)
-		{
-			bufsize += 64;
-			tokens = realloc(tokens, sizeof(char *) * bufsize);
-			if (!tokens)
-				exit(EXIT_FAILURE);
-		}
-		token = strtok(NULL, SHELL_TOK_DELIM);
-	}
-
-	tokens[pos] = NULL;
-	return (tokens);
+ return (args);
 }
-

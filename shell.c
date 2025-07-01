@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+
 extern char **environ;
 
 /**
@@ -63,6 +64,30 @@ int main(void)
  */
 void shell_loop(void)
 {
+
+	char *line = NULL;
+	char **args = NULL;
+	int status = 1;
+
+	while (status)
+	{
+		print_prompt();
+		line = read_line();
+		if (!line)
+		{
+			if (isatty(STDIN_FILENO))
+				write(STDOUT_FILENO, "\n", 1);
+			break;
+		}
+
+		args = parse_line(line);
+		if (args)
+		{
+			status = execute(args);
+			free(args);
+		}
+		free(line);
+	}
     char *line = NULL;
     char **args = NULL;
     int status = 1;
@@ -85,4 +110,5 @@ void shell_loop(void)
         }
         free(line);
     }
+
 }

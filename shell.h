@@ -20,6 +20,14 @@ char *read_line(void);
 char **parse_line(char *line);
 int execute(char **args);
 void print_prompt(void);
+
+  
+int shell_exit(void);
+int shell_env(void);
+void handle_cd(char **args);
+char *find_command(char *cmd);
 int execute_command(char **args, char **env);
-int handle_builtins(char **args, char **env);
+
+\\
 #endif /* SHELL_H */
+

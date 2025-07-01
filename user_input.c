@@ -1,16 +1,16 @@
 #include "shell.h"
 
 /**
- * read_line - Reads a line from stdin.
- * Return: Pointer to the input string.
+ * read_line - Reads user input from stdin.
+ * Return: Pointer to input string.
  */
 char *read_line(void)
 {
 	char *line = NULL;
-	size_t bufsize = 0;
+	size_t len = 0;
 	ssize_t nread;
 
-	nread = getline(&line, &bufsize, stdin);
+	nread = getline(&line, &len, stdin);
 	if (nread == -1)
 	{
 		free(line);
@@ -20,38 +20,38 @@ char *read_line(void)
 }
 
 /**
- * parse_line - Splits a command line into tokens.
- * @line: The input string to parse.
+ * parse_line - Splits input into tokens.
+ * @line: Input string to parse.
  * Return: Null-terminated array of tokens.
  */
 char **parse_line(char *line)
 {
-	int bufsize = BUFSIZE, position = 0;
+	int bufsize = BUFSIZE, pos = 0;
 	char **tokens = malloc(bufsize * sizeof(char *));
 	char *token;
 
 	if (!tokens)
 	{
-		fprintf(stderr, "Allocation error\n");
+		perror("malloc");
 		exit(EXIT_FAILURE);
 	}
 
 	token = strtok(line, DELIM);
 	while (token)
 	{
-		tokens[position++] = token;
-		if (position >= bufsize)
+		tokens[pos++] = token;
+		if (pos >= bufsize)
 		{
 			bufsize += BUFSIZE;
 			tokens = realloc(tokens, bufsize * sizeof(char *));
 			if (!tokens)
 			{
-				fprintf(stderr, "Allocation error\n");
+				perror("realloc");
 				exit(EXIT_FAILURE);
 			}
 		}
 		token = strtok(NULL, DELIM);
 	}
-	tokens[position] = NULL;
+	tokens[pos] = NULL;
 	return (tokens);
 }

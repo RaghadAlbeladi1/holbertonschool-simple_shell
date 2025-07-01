@@ -1,69 +1,110 @@
 #include "shell.h"
-#include <string.h>
 
-/**
- * execute - Checks and executes built-in or external commands.
- * @args: Array of parsed arguments.
- *
- * Return: 1 to continue running the shell, or other status from built-in.
- */
-int execute(char **args)
-{
-int status;
-unsigned int i;
-
-built_s builtins[] = {
-{"exit", shell_exit},
-{"env", shell_env},
-{NULL, NULL}
+/* Array of built-in commands */
+builtin_t builtins[] = {
+    {"exit", shell_exit},
+    {"env", shell_env},
+    {"cd", shell_cd},
+    {NULL, NULL}
 };
 
-if (args[0] == NULL)
-return (1);
-
-for (i = 0; builtins[i].name != NULL; i++)
+/**
+ * execute - Main command execution function
+ * @args: Array of command and arguments
+ * Return: 1 to continue, 0 to exit
+ */
+int execute(char **args)
 {
-if (strcmp(args[0], builtins[i].name) == 0)
-{
-status = builtins[i].func();
-return (status);
-}
-}
+    int i;
 
-return (execute_external(args));
+    if (args[0] == NULL)
+        return (1);
+
+    /* Check for built-in commands */
+    for (i = 0; builtins[i].name != NULL; i++)
+    {
+        if (_strcmp(args[0], builtins[i].name) == 0)
+            return (builtins[i].func(args, environ));
+    }
+
+    /* Execute external command */
+    return (execute_external(args, environ));
 }
 
 /**
- * execute_external - Executes non-built-in (external) commands.
- * @args: Array of command and its arguments.
- *
- * Return: 1 to continue running the shell.
- */
-int execute_external(char **args)
+ * execute_external - Executes external programs
+ * @args: Command and arguments
+ * @env: Environment variables
+ * Return: 1 on success, 0 on failure
+ */
+int execute_external(char **args, char **env)
 {
-pid_t pid;
-int status;
+    pid_t pid;
+    int status;
+    char *full_path = find_path(args[0], env);
 
-if (args[0] == NULL)
-return (1);
+    if (!full_path)
+    {
+        fprintf(stderr, "%s: 1: %s: not found\n", args[0], args[0]);
+        return (1);
+    }
 
-pid = fork();
-if (pid == 0)
-{
-if (execve(args[0], args, environ) == -1)
-{
-perror("hsh");
-exit(EXIT_FAILURE);
-}
-}
-else if (pid < 0)
-{
-perror("fork");
-}
-else
-{
-waitpid(pid, &status, 0);
+    pid = fork();
+    if (pid == 0)
+    {
+        if (execve(full_path, args, env) == -1)
+        {
+            perror("execve error");
+            free(full_path);
+            exit(EXIT_FAILURE);
+        }
+    }
+    else if (pid < 0)
+    {
+        perror("fork error");
+        free(full_path);
+        return (1);
+    }
+    else
+    {
+        waitpid(pid, &status, WUNTRACED);
+    }
+
+    free(full_path);
+    return (1);
 }
 
-return (1);
+/**
+ * shell_exit - Handles exit command
+ * @args: Arguments
+ * @env: Environment variables
+ * Return: 0 to exit
+ */
+int shell_exit(char **args, char **env)
+{
+    int status = 0;
+    (void)env;
+
+    if (args[1])
+        status = _atoi(args[1]);
+
+    free_tokens(args);
+    exit(status);
+}
+
+/**
+ * shell_env - Prints environment variables
+ * @args: Arguments
+ * @env: Environment variables
+ * Return: Always 1
+ */
+int shell_env(char **args, char **env)
+{
+    int i;
+    (void)args;
+
+    for (i = 0; env[i]; i++)
+        printf("%s\n", env[i]);
+
+    return (1);
 }

@@ -1,11 +1,21 @@
 #include "shell.h"
 
-char **parse_line(char *line) {
+/**
+ * parse_line - Splits a string into tokens (must be freed by caller)
+ * @line: The input string to split
+ * Return: Array of tokens, or NULL on failure
+ */
+char **parse_line(char *line)
+{
+    if (!line || !*line) {
+        return NULL;
+    }
+
     int bufsize = BUFSIZE, pos = 0;
     char **tokens = malloc(bufsize * sizeof(char *));
     if (!tokens) {
-        perror("malloc");
-        exit(EXIT_FAILURE);
+        perror("malloc failed");
+        return NULL;
     }
 
     char *token = strtok(line, DELIM);
@@ -16,9 +26,9 @@ char **parse_line(char *line) {
             bufsize += BUFSIZE;
             char **new_tokens = realloc(tokens, bufsize * sizeof(char *));
             if (!new_tokens) {
-                perror("realloc");
+                perror("realloc failed");
                 free(tokens);
-                exit(EXIT_FAILURE);
+                return NULL;
             }
             tokens = new_tokens;
         }

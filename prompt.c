@@ -1,12 +1,10 @@
 #include "shell.h"
 
 /**
-
-* display_prompt - prints the shell prompt
-*/
-void display_prompt(void)
+ * print_prompt - Displays shell prompt.
+ */
+void print_prompt(void)
 {
-write(STDOUT_FILENO, "$ ", 2);
-
+	if (isatty(STDIN_FILENO))
+		write(STDOUT_FILENO, "#cisfun$ ", 9);
 }
-

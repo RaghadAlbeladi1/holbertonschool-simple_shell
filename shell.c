@@ -1,44 +1,88 @@
 #include "shell.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+extern char **environ;
 
 /**
-
-* main - Entry point for the shell
-* @argc: argument count (unused)
-* @argv: argument vector (unused)
-* @env: environment variables
-*
-* Return: 0 on success
-*/
-int main(int argc, char **argv, char **env)
+ * execute - Executes a command with arguments.
+ * @args: Null-terminated array of arguments.
+ * Return: 1 to continue, 0 to exit.
+ */
+int execute(char **args)
 {
-char *line;
-char **args;
+    pid_t pid;
+    int status;
 
-(void)argc;
-(void)argv;
-
-while (1)
-{
-display_prompt();
-line = get_input();
-
-if (line == NULL)
-{
-write(STDOUT_FILENO, "\n", 1);
-break;
+    if (!args[0])
+        return (1);
+    if (strcmp(args[0], "exit") == 0)
+        return (0);
+    if (strcmp(args[0], "env") == 0)
+    {
+        char **env = environ;
+        while (*env)
+            printf("%s\n", *env++);
+        return (1);
+    }
+    pid = fork();
+    if (pid == 0)
+    {
+        if (execve(args[0], args, environ) == -1)
+        {
+            fprintf(stderr, "./shell: No such file or directory\n");
+            exit(EXIT_FAILURE);
+        }
+    }
+    else if (pid < 0)
+    {
+        perror("fork");
+    }
+    else
+    {
+        waitpid(pid, &status, 0);
+    }
+    return (1);
 }
 
-args = tokenize_input(line);
-if (args[0] != NULL)
+/**
+ * main - Entry point for simple shell.
+ * Return: Always EXIT_SUCCESS.
+ */
+int main(void)
 {
-if (!handle_builtins(args, env))
-execute_command(args, env);
+    shell_loop();
+    return (EXIT_SUCCESS);
 }
 
-free(args);
-free(line);
+/**
+ * shell_loop - Main shell processing loop (REPL).
+ */
+void shell_loop(void)
+{
+    char *line = NULL;
+    char **args = NULL;
+    int status = 1;
 
+    while (status)
+    {
+        print_prompt();
+        line = read_line();
+        if (!line)
+        {
+            if (isatty(STDIN_FILENO))
+                write(STDOUT_FILENO, "\n", 1);
+            break;
+        }
+        args = parse_line(line);
+        if (args)
+        {
+            status = execute(args);
+            free(args);
+        }
+        free(line);
+    }
 }
-return (0);
-}
-

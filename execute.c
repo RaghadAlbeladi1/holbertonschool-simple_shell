@@ -1,22 +1,15 @@
 #include "shell.h"
 
-/**
- * execute - Executes a command
- * @args: Command arguments
- * Return: 1 to continue, 0 to exit
- */
 int execute(char **args)
 {
     pid_t pid;
     int status;
     char *full_path = NULL;
 
-    if (!args || !args[0])
-        return 1;
+    if (!args || !args[0]) return 1;
 
     /* Handle builtins */
-    if (handle_builtins(args))
-        return 1;
+    if (handle_builtins(args)) return 1;
 
     /* Handle PATH */
     if (strchr(args[0], '/') == NULL)
@@ -37,6 +30,7 @@ int execute(char **args)
         if (execve(args[0], args, environ) == -1)
         {
             perror("execve");
+            if (full_path) free(full_path);
             _exit(EXIT_FAILURE);
         }
     }

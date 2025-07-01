@@ -1,26 +1,11 @@
 #include "shell.h"
 #include <sys/stat.h>
 #include <sys/wait.h>
-
-/**
- * _strcmp - Compares two strings
- * @s1: First string
- * @s2: Second string
- * Return: 0 if equal, difference otherwise
- */
-int _strcmp(const char *s1, const char *s2)
-{
-    while (*s1 && *s2 && *s1 == *s2)
-    {
-        s1++;
-        s2++;
-    }
-    return (*s1 - *s2);
-}
+#include <unistd.h>
 
 /**
  * execute - Executes a command with arguments
- * @args: Null-terminated array of arguments
+ * @args: Array of command and arguments
  * Return: 1 to continue, 0 to exit
  */
 int execute(char **args)
@@ -30,7 +15,7 @@ int execute(char **args)
     struct stat st;
 
     if (args[0] == NULL)
-        return (1);
+        return (1); /* Empty command */
 
     /* Handle built-in commands */
     if (_strcmp(args[0], "exit") == 0)
@@ -61,19 +46,23 @@ int execute(char **args)
     pid = fork();
     if (pid == 0)
     {
+        /* Child process */
         if (execve(args[0], args, environ) == -1)
         {
-            perror("./hsh");
+            fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
             exit(EXIT_FAILURE);
         }
     }
     else if (pid < 0)
     {
-        perror("fork");
+        /* Forking error */
+        perror("./hsh");
     }
     else
     {
-        waitpid(pid, &status, 0);
+        /* Parent process */
+        waitpid(pid, &status, WUNTRACED);
+        fflush(stdout); /* Ensure output is flushed */
     }
 
     return (1);

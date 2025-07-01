@@ -2,8 +2,13 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 
-/* دالة مقارنة النصوص (بدون استخدام strcmp من string.h) */
-static int custom_strcmp(const char *s1, const char *s2)
+/**
+ * _strcmp - Custom string comparison (بديل لـ strcmp)
+ * @s1: First string
+ * @s2: Second string
+ * Return: 0 if equal, difference otherwise
+ */
+int _strcmp(const char *s1, const char *s2)
 {
     while (*s1 && (*s1 == *s2))
     {
@@ -14,11 +19,11 @@ static int custom_strcmp(const char *s1, const char *s2)
 }
 
 /**
- * execute_command - تنفيذ الأوامر (بديل آمن لـ execute)
- * @args: مصفوفة الأوامر والوسائط
- * Return: 1 لمواصلة التنفيذ، 0 للخروج
+ * execute - Executes command (معدل ليتوافق مع كود زميلتك)
+ * @args: Command and arguments
+ * Return: 1 to continue, 0 to exit
  */
-int execute_command(char **args)
+int execute(char **args)
 {
     pid_t pid;
     int status;
@@ -27,11 +32,11 @@ int execute_command(char **args)
     if (args[0] == NULL)
         return (1);
 
-    /* معالجة الأوامر المدمجة */
-    if (custom_strcmp(args[0], "exit") == 0)
+    /* Handle builtins */
+    if (_strcmp(args[0], "exit") == 0)
         return (0);
 
-    if (custom_strcmp(args[0], "env") == 0)
+    if (_strcmp(args[0], "env") == 0)
     {
         char **env = environ;
         while (*env)
@@ -39,25 +44,23 @@ int execute_command(char **args)
         return (1);
     }
 
-    /* التحقق من وجود الملف */
+    /* Check if command exists */
     if (stat(args[0], &st) == -1)
     {
         fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
         return (1);
     }
 
-    /* التحقق من صلاحيات التنفيذ */
+    /* Check execute permission */
     if (!(st.st_mode & S_IXUSR))
     {
         fprintf(stderr, "./hsh: 1: %s: Permission denied\n", args[0]);
         return (1);
     }
 
-    /* إنشاء عملية جديدة */
     pid = fork();
     if (pid == 0)
     {
-        /* عملية الابن */
         if (execve(args[0], args, environ) == -1)
         {
             fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
@@ -66,12 +69,10 @@ int execute_command(char **args)
     }
     else if (pid < 0)
     {
-        /* خطأ في fork */
         perror("./hsh");
     }
     else
     {
-        /* عملية الأب */
         waitpid(pid, &status, WUNTRACED);
     }
 

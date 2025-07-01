@@ -1,101 +1,121 @@
 #include "shell.h"
-#include <sys/wait.h>
 
 /**
-* find_command - Search for command in PATH environment variable
-* @command: command name
-* @env: environment variables
-*
-* Return: full path to command or NULL if not found
-*/
-char *find_command(char *command, char **env)
+ * is_builtin - Checks and executes built-in commands
+ * @args: Command and arguments
+ *
+ * Return: 1 if a built-in command was executed, 0 otherwise
+ */
+int is_builtin(char **args)
 {
-char *path_env = NULL, *path_dup, *token, *full_path;
-int len;
+ int i = 0;
 
-for (int i = 0; env[i]; i++)
-{
-if (strncmp(env[i], "PATH=", 5) == 0)
-{
-path_env = env[i] + 5;
-break;
-}
-}
-if (!path_env)
-return NULL;
+ if (strcmp(args[0], "env") == 0)
+ {
+  while (environ[i])
+  {
+   printf("%s\n", environ[i]);
+   i++;
+  }
+  return (1);
+ }
+ else if (strcmp(args[0], "cd") == 0)
+ {
+  handle_cd(args);
+  return (1);
+ }
 
-path_dup = strdup(path_env);
-token = strtok(path_dup, ":");
-while (token)
-{
-len = strlen(token) + strlen(command) + 2;
-full_path = malloc(len);
-if (!full_path)
-{
-free(path_dup);
-return NULL;
-}
-snprintf(full_path, len, "%s/%s", token, command);
-if (access(full_path, X_OK) == 0)
-{
-free(path_dup);
-return full_path;
-}
-free(full_path);
-token = strtok(NULL, ":");
-}
-free(path_dup);
-return NULL;
+ return (0);
 }
 
 /**
-
-* execute_command - execute command by forking and calling execve
-* @args: command arguments
-* @env: environment variables
-*/
-void execute_command(char **args, char **env)
+ * resolve_cmd_path - Resolves the full path of the command
+ * @cmd: Command name
+ *
+ * Return: Pointer to command path if found, NULL otherwise
+ */
+char *resolve_cmd_path(char *cmd)
 {
-pid_t pid;
-int status;
-char *cmd_path;
+ char *cmd_path = NULL;
 
-if (strchr(args[0], '/'))
-cmd_path = args[0];
-else
-{
-cmd_path = find_command(args[0], env);
-if (!cmd_path)
-{
-perror("command not found");
-return;
-}
-}
+ if (strchr(cmd, '/'))
+ {
+  if (access(cmd, X_OK) == 0)
+   cmd_path = strdup(cmd);
+ }
+ else
+ {
+  cmd_path = find_command(cmd);
+ }
 
-pid = fork();
-if (pid == -1)
-{
-perror("fork failed");
-if (cmd_path != args[0])
-free(cmd_path);
-return;
-
+ return (cmd_path);
 }
 
-if (pid == 0)
+/**
+ * run_cmd - Forks and executes the command
+ * @cmd_path: Path to the executable command
+ * @args: Command and arguments
+ *
+ * Return: Exit status of the command
+ */
+int run_cmd(char *cmd_path, char **args)
 {
-if (execve(cmd_path, args, env) == -1)
+ pid_t pid;
+ int status;
+
+ pid = fork();
+ if (pid == 0)
+ {
+  if (execve(cmd_path, args, environ) == -1)
+  {
+   fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
+   free(cmd_path);
+   exit(127);
+  }
+ }
+ else if (pid < 0)
+ {
+  perror("fork");
+  status = 1;
+ }
+ else
+ {
+  waitpid(pid, &status, 0);
+  if (WIFEXITED(status))
+   status = WEXITSTATUS(status);
+  else
+   status = 1;
+ }
+
+ return (status);
+}
+
+/**
+ * execute_cmd - Main command execution handler
+ * @args: Command and arguments
+ *
+ * Return: Exit status
+ */
+int execute_cmd(char **args)
 {
-perror("execve failed");
-if (cmd_path != args[0])
-free(cmd_path);
-exit(EXIT_FAILURE);
-}
-}
-else
-waitpid(pid, &status, 0);
+ char *cmd_path;
+ int status;
 
-if (cmd_path != args[0])
-free(cmd_path);
-}
+ if (args[0] == NULL)
+  return (0);
 
+ if (is_builtin(args))
+  return (0);
+
+ cmd_path = resolve_cmd_path(args[0]);
+ if (cmd_path == NULL)
+ {
+  fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
+  return (127);
+ }
+
+ status = run_cmd(cmd_path, args);
+ free(cmd_path);
+
+ return (status);
+}

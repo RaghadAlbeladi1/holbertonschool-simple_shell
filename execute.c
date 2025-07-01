@@ -20,14 +20,26 @@ int _strcmp(const char *s1, const char *s2)
 
 /**
  * find_path - Locates command in PATH
- * @cmd: Command to find
+ * @command: Command to find
+ * @env: Environment variables
  * Return: Full path if found, NULL otherwise
  */
-char *find_path(char *cmd)
+char *find_path(char *command, char **env)
 {
-    char *path = getenv("PATH");
+    char *path = NULL;
     char *path_copy, *dir, *full_path;
     struct stat st;
+    int i;
+
+    /* Get PATH from environment */
+    for (i = 0; env[i] != NULL; i++)
+    {
+        if (_strncmp(env[i], "PATH=", 5) == 0)
+        {
+            path = env[i] + 5;
+            break;
+        }
+    }
 
     if (!path)
         return NULL;
@@ -37,8 +49,8 @@ char *find_path(char *cmd)
 
     while (dir)
     {
-        full_path = malloc(strlen(dir) + strlen(cmd) + 2);
-        sprintf(full_path, "%s/%s", dir, cmd);
+        full_path = malloc(strlen(dir) + strlen(command) + 2);
+        sprintf(full_path, "%s/%s", dir, command);
 
         if (stat(full_path, &st) == 0 && (st.st_mode & S_IXUSR))
         {
@@ -55,11 +67,40 @@ char *find_path(char *cmd)
 }
 
 /**
+ * shell_exit - Exit shell builtin
+ * @args: Arguments
+ * @env: Environment variables
+ * Return: 0 to exit
+ */
+int shell_exit(char **args, char **env)
+{
+    (void)env; // Unused parameter
+    if (args[1])
+        exit(_atoi(args[1]));
+    exit(EXIT_SUCCESS);
+}
+
+/**
+ * shell_env - Print environment builtin
+ * @args: Arguments
+ * @env: Environment variables
+ * Return: Always 1
+ */
+int shell_env(char **args, char **env)
+{
+    (void)args; // Unused parameter
+    while (*env)
+        printf("%s\n", *env++);
+    return (1);
+}
+
+/**
  * execute - Executes a command
  * @args: Array of arguments
+ * @env: Environment variables
  * Return: 1 to continue, 0 to exit
  */
-int execute(char **args)
+int execute(char **args, char **env)
 {
     pid_t pid;
     int status;
@@ -70,15 +111,13 @@ int execute(char **args)
         return (1);
 
     if (_strcmp(args[0], "exit") == 0)
-        return (0);
+        return shell_exit(args, env);
 
     if (_strcmp(args[0], "env") == 0)
-    {
-        char **env = environ;
-        while (*env)
-            printf("%s\n", *env++);
-        return (1);
-    }
+        return shell_env(args, env);
+
+    if (_strcmp(args[0], "cd") == 0)
+        return shell_cd(args, env);
 
     /* Check if command contains path */
     if (strchr(args[0], '/'))
@@ -92,7 +131,7 @@ int execute(char **args)
     }
     else
     {
-        full_path = find_path(args[0]);
+        full_path = find_path(args[0], env);
         if (!full_path)
         {
             fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
@@ -100,17 +139,10 @@ int execute(char **args)
         }
     }
 
-    if (!(stat(full_path, &st) == 0 && (st.st_mode & S_IXUSR)))
-    {
-        fprintf(stderr, "./hsh: 1: %s: Permission denied\n", args[0]);
-        free(full_path);
-        return (1);
-    }
-
     pid = fork();
     if (pid == 0)
     {
-        if (execve(full_path, args, environ) == -1)
+        if (execve(full_path, args, env) == -1)
         {
             fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
             free(full_path);

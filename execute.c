@@ -1,9 +1,9 @@
 #include "shell.h"
 
 /**
- * execute - Executes a command with arguments.
- * @args: Null-terminated array of arguments.
- * Return: 1 to continue, 0 to exit.
+ * execute - Executes a command
+ * @args: Command arguments
+ * Return: 1 to continue, 0 to exit
  */
 int execute(char **args)
 {
@@ -11,7 +11,7 @@ int execute(char **args)
     int status;
     char *full_path = NULL;
 
-    if (!args[0])
+    if (!args || !args[0])
         return 1;
 
     /* Handle builtins */
@@ -49,6 +49,8 @@ int execute(char **args)
         waitpid(pid, &status, 0);
     }
 
-    free(full_path);
+    if (full_path && full_path != args[0])
+        free(full_path);
+
     return 1;
 }

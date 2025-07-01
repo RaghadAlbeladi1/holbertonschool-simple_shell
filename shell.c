@@ -26,9 +26,4 @@ void shell_loop(void)
         args = parse_line(line);
         if (args)
         {
-            status = execute(args);  // هذه ستستخدم الدالة من execute.c
-            free(args);
-        }
-        free(line);
-    }
-}
+            status = execute(args);

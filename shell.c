@@ -50,7 +50,7 @@ int execute(char **args)
 }
 
 /**
- * main - Entry point for simple shell.
+ * main - Entry point for the simple shell.
  * Return: Always EXIT_SUCCESS.
  */
 int main(void)
@@ -60,10 +60,36 @@ int main(void)
 }
 
 /**
- * shell_loop - Main shell processing loop (REPL).
+ * shell_loop - Main REPL loop for the shell.
  */
 void shell_loop(void)
 {
+
+	char *line = NULL;
+	char **args = NULL;
+	int status = 1;
+
+	while (status)
+	{
+		if (isatty(STDIN_FILENO))
+			print_prompt();
+
+		line = read_line();
+		if (!line)
+		{
+			if (isatty(STDIN_FILENO))
+				write(STDOUT_FILENO, "\n", 1);
+			break;
+		}
+
+		args = parse_line(line);
+		if (args)
+		{
+			status = execute(args);
+			free(args);
+		}
+		free(line);
+	}
     char *line = NULL;
     char **args = NULL;
     int status = 1;

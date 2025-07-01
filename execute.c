@@ -3,7 +3,7 @@
 #include <sys/wait.h>
 
 /**
- * _strcmp - Custom string comparison (بديل لـ strcmp)
+ * _strcmp - Custom string comparison
  * @s1: First string
  * @s2: Second string
  * Return: 0 if equal, difference otherwise
@@ -19,8 +19,8 @@ int _strcmp(const char *s1, const char *s2)
 }
 
 /**
- * execute - Executes command (معدل ليتوافق مع كود زميلتك)
- * @args: Command and arguments
+ * execute - Executes a command
+ * @args: Array of arguments
  * Return: 1 to continue, 0 to exit
  */
 int execute(char **args)

@@ -13,38 +13,27 @@
 
 extern char **environ;
 
-/* Function prototypes */
-int execute(char **args);
+/* Core Shell Functions */
 void shell_loop(void);
 char *read_line(void);
 char **parse_line(char *line);
 void print_prompt(void);
 
-
-
 /* Command Execution */
-int execute_external(char **args, char **env);
-char *find_path(char *command, char **env);
+int execute(char **args, char **env);            // الرئيسية
+int execute_external(char **args, char **env);   // للأوامر الخارجية
+char *find_path(char *command, char **env);     // للبحث في PATH
 
 /* Built-in Commands */
-int shell_exit(char **args, char **env);
-int shell_env(char **args, char **env);
-int shell_cd(char **args, char **env);
+int shell_exit(char **args, char **env);        // للأمر exit
+int shell_env(char **args, char **env);         // للأمر env
+int shell_cd(char **args, char **env);          // للأمر cd
 
 /* Helper Functions */
-int _strcmp(const char *s1, const char *s2);
-int _atoi(char *s);
-void free_tokens(char **tokens);
-void _puts(char *str);
-
-  
-int shell_exit(void);
-int shell_env(void);
-void handle_cd(char **args);
-char *find_command(char *cmd);
-int execute_command(char **args, char **env);
-
-\\
+int _strcmp(const char *s1, const char *s2);    // مقارنة سلاسل
+int _strncmp(const char *s1, const char *s2, size_t n); // مقارنة n أحرف
+int _atoi(char *s);                             // تحويل سلسلة إلى عدد
+void free_tokens(char **tokens);                // تحرير الذاكرة
+void _puts(char *str);                          // طباعة سلسلة
 
 #endif /* SHELL_H */
-

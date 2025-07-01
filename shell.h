@@ -20,5 +20,6 @@ char *read_line(void);
 char **parse_line(char *line);
 int execute(char **args);
 void print_prompt(void);
+int execute_command(char **args, char **env);
 int handle_builtins(char **args, char **env);
 #endif /* SHELL_H */

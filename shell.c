@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * main - Entry point for simple shell.
+ * main - Entry point for the simple shell.
  * Return: Always EXIT_SUCCESS.
  */
 int main(void)
@@ -11,7 +11,7 @@ int main(void)
 }
 
 /**
- * shell_loop - Main shell processing loop (REPL).
+ * shell_loop - Main REPL loop for the shell.
  */
 void shell_loop(void)
 {
@@ -21,7 +21,9 @@ void shell_loop(void)
 
 	while (status)
 	{
-		print_prompt();
+		if (isatty(STDIN_FILENO))
+			print_prompt();
+
 		line = read_line();
 		if (!line)
 		{

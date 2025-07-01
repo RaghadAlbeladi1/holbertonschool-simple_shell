@@ -1,45 +1,29 @@
 #include "shell.h"
 
-int execute(char **args)
-{
-    pid_t pid;
-    int status;
-    char *full_path = NULL;
-
+int execute(char **args) {
     if (!args || !args[0]) return 1;
 
-    /* Handle builtins */
     if (handle_builtins(args)) return 1;
 
-    /* Handle PATH */
-    if (strchr(args[0], '/') == NULL)
-    {
+    char *full_path = NULL;
+    if (strchr(args[0], '/') == NULL) {
         full_path = find_in_path(args[0]);
-        if (!full_path)
-        {
+        if (!full_path) {
             fprintf(stderr, "%s: 1: %s: not found\n", "hsh", args[0]);
             return 1;
         }
         args[0] = full_path;
     }
 
-    /* Fork and execute */
-    pid = fork();
-    if (pid == 0)
-    {
-        if (execve(args[0], args, environ) == -1)
-        {
-            perror("execve");
-            if (full_path) free(full_path);
-            _exit(EXIT_FAILURE);
-        }
-    }
-    else if (pid < 0)
-    {
+    pid_t pid = fork();
+    if (pid == 0) {
+        execve(args[0], args, environ);
+        perror("execve");
+        if (full_path) free(full_path);
+        _exit(EXIT_FAILURE);
+    } else if (pid < 0) {
         perror("fork");
-    }
-    else
-    {
+    } else {
         waitpid(pid, &status, 0);
     }
 

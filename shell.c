@@ -27,3 +27,8 @@ void shell_loop(void)
         if (args)
         {
             status = execute(args);
+            free(args);
+        }
+        free(line);
+    }
+}

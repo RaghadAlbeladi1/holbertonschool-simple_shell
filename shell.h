@@ -31,4 +31,13 @@ int _strcmp(const char *s1, const char *s2);
 char *_strdup(const char *str);
 void print_error(char *prog_name, char *cmd, char *msg);
 
+  
+int shell_exit(void);
+int shell_env(void);
+void handle_cd(char **args);
+char *find_command(char *cmd);
+int execute_command(char **args, char **env);
+
+\\
 #endif /* SHELL_H */
+

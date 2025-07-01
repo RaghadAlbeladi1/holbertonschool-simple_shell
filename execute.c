@@ -169,7 +169,7 @@ void print_error(char *command, char *message)
         shell_name = "hsh";
 
     _fprintf(stderr, "%s: 1: %s", shell_name, command);
-    
+
     if (message)
         _fprintf(stderr, ": %s\n", message);
     else

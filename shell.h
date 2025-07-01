@@ -13,7 +13,8 @@
 void display_prompt(void);
 char *get_input(void);
 char **tokenize_input(char *line);
-int handle_builtins(char **args, char **env);
+int shell_exit(void);
+int shell_env(void);
 void execute_command(char **args, char **env);
 char *find_command(char *command, char **env);
 

@@ -1,121 +1,177 @@
 #include "shell.h"
 
 /**
- * is_builtin - Checks and executes built-in commands
- * @args: Command and arguments
- *
- * Return: 1 if a built-in command was executed, 0 otherwise
+ * execute - Main command execution function.
+ * @args: Array of command and arguments.
+ * Return: 1 to continue, 0 to exit.
  */
-int is_builtin(char **args)
+int execute(char **args)
 {
- int i = 0;
+    if (args[0] == NULL)
+        return (1);
 
- if (strcmp(args[0], "env") == 0)
- {
-  while (environ[i])
-  {
-   printf("%s\n", environ[i]);
-   i++;
-  }
-  return (1);
- }
- else if (strcmp(args[0], "cd") == 0)
- {
-  handle_cd(args);
-  return (1);
- }
+    if (_strcmp(args[0], "exit") == 0)
+        return (handle_exit(args));
 
- return (0);
+    if (_strcmp(args[0], "env") == 0)
+        return (handle_env());
+
+    return (execute_external(args));
 }
 
 /**
- * resolve_cmd_path - Resolves the full path of the command
- * @cmd: Command name
- *
- * Return: Pointer to command path if found, NULL otherwise
+ * execute_external - Executes external programs.
+ * @args: Command and arguments array.
+ * Return: 1 on success, 0 on failure.
  */
-char *resolve_cmd_path(char *cmd)
+int execute_external(char **args)
 {
- char *cmd_path = NULL;
+    pid_t pid;
+    int status;
+    char *full_path = find_path(args[0]);
 
- if (strchr(cmd, '/'))
- {
-  if (access(cmd, X_OK) == 0)
-   cmd_path = strdup(cmd);
- }
- else
- {
-  cmd_path = find_command(cmd);
- }
+    if (!full_path)
+    {
+        print_error(args[0], "not found");
+        return (1);
+    }
 
- return (cmd_path);
+    pid = fork();
+    if (pid == 0)
+    {
+        if (execve(full_path, args, environ) == -1)
+        {
+            print_error(args[0], NULL);
+            free(full_path);
+            exit(EXIT_FAILURE);
+        }
+    }
+    else if (pid < 0)
+    {
+        print_error("fork", NULL);
+        free(full_path);
+    }
+    else
+    {
+        waitpid(pid, &status, WUNTRACED);
+    }
+
+    free(full_path);
+    return (1);
 }
 
 /**
- * run_cmd - Forks and executes the command
- * @cmd_path: Path to the executable command
- * @args: Command and arguments
- *
- * Return: Exit status of the command
+ * find_path - Locates command in PATH.
+ * @command: Command to locate.
+ * Return: Full path if found, NULL otherwise.
  */
-int run_cmd(char *cmd_path, char **args)
+char *find_path(char *command)
 {
- pid_t pid;
- int status;
+    char *path, *path_copy, *dir, *full_path;
+    struct stat st;
 
- pid = fork();
- if (pid == 0)
- {
-  if (execve(cmd_path, args, environ) == -1)
-  {
-   fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
-   free(cmd_path);
-   exit(127);
-  }
- }
- else if (pid < 0)
- {
-  perror("fork");
-  status = 1;
- }
- else
- {
-  waitpid(pid, &status, 0);
-  if (WIFEXITED(status))
-   status = WEXITSTATUS(status);
-  else
-   status = 1;
- }
+    if (_strchr(command, '/'))
+    {
+        if (stat(command, &st) == 0 && (st.st_mode & S_IXUSR))
+            return (_strdup(command));
+        return (NULL);
+    }
 
- return (status);
+    path = _getenv("PATH");
+    if (!path)
+        return (NULL);
+
+    path_copy = _strdup(path);
+    dir = _strtok(path_copy, ":");
+
+    while (dir)
+    {
+        full_path = build_path(dir, command);
+        if (!full_path)
+        {
+            free(path_copy);
+            return (NULL);
+        }
+
+        if (stat(full_path, &st) == 0 && (st.st_mode & S_IXUSR))
+        {
+            free(path_copy);
+            return (full_path);
+        }
+
+        free(full_path);
+        dir = _strtok(NULL, ":");
+    }
+
+    free(path_copy);
+    return (NULL);
 }
 
 /**
- * execute_cmd - Main command execution handler
- * @args: Command and arguments
- *
- * Return: Exit status
+ * build_path - Constructs full path from directory and command.
+ * @dir: Directory path.
+ * @command: Command name.
+ * Return: Allocated full path string.
  */
-int execute_cmd(char **args)
+char *build_path(char *dir, char *command)
 {
- char *cmd_path;
- int status;
+    char *full_path;
+    int len = _strlen(dir) + _strlen(command) + 2;
 
- if (args[0] == NULL)
-  return (0);
+    full_path = malloc(sizeof(char) * len);
+    if (!full_path)
+        return (NULL);
 
- if (is_builtin(args))
-  return (0);
+    _sprintf(full_path, "%s/%s", dir, command);
+    return (full_path);
+}
 
- cmd_path = resolve_cmd_path(args[0]);
- if (cmd_path == NULL)
- {
-  fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
-  return (127);
- }
+/**
+ * handle_exit - Handles exit command.
+ * @args: Arguments array.
+ * Return: 0 to exit.
+ */
+int handle_exit(char **args)
+{
+    int status = 0;
 
- status = run_cmd(cmd_path, args);
- free(cmd_path);
+    if (args[1])
+        status = _atoi(args[1]);
 
- return (status);
+    free_tokens(args);
+    exit(status);
+}
+
+/**
+ * handle_env - Prints environment variables.
+ * Return: Always 1.
+ */
+int handle_env(void)
+{
+    int i;
+
+    for (i = 0; environ[i]; i++)
+        _puts(environ[i]);
+
+    return (1);
+}
+
+/**
+ * print_error - Prints formatted error message.
+ * @command: Failed command.
+ * @message: Custom error message.
+ */
+void print_error(char *command, char *message)
+{
+    char *shell_name = _getenv("_");
+
+    if (!shell_name)
+        shell_name = "hsh";
+
+    _fprintf(stderr, "%s: 1: %s", shell_name, command);
+    
+    if (message)
+        _fprintf(stderr, ": %s\n", message);
+    else
+        perror("");
 }

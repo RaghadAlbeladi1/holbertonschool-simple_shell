@@ -21,6 +21,7 @@ char *read_line(void);
 char **parse_line(char *line);
 int execute(char **args);
 void print_prompt(void);
+int execute_command(char **args);
 
 /* Command Execution */
 int execute_external(char **args, char **env);

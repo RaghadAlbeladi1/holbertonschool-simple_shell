@@ -7,30 +7,29 @@
  */
 int main(void)
 {
-	char command[120];
-	int last_status = 0;
-	int builtin_status;
+    char command[120];
+    int last_status = 0;
+    int builtin_status;
 
-	while (1)
-	{
-		if (isatty(STDIN_FILENO))
-			display_prompt();
+    while (1)
+    {
+        if (isatty(STDIN_FILENO))
+            display_prompt();
 
-		read_command(command, sizeof(command));
+        read_command(command, sizeof(command));
 
-		if (command[0] == '\0')
-			continue;
+        if (command[0] == '\0')
+            continue;
 
-		builtin_status = handle_builtin(command);
-		if (builtin_status == -1)
-			exit(last_status);
+        builtin_status = handle_builtin(command);
+        if (builtin_status == -1)
+            exit(last_status);
 
-		if (builtin_status == 1)
-			continue;
+        if (builtin_status == 1)
+            continue;
 
-		last_status = execute_command(command);
-	}
+        last_status = execute_command(command);
+    }
 
-	return (0);
+    return (last_status);
 }
-

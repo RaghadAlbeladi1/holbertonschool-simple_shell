@@ -1,11 +1,5 @@
 #include "shell.h"
 
-/**
- * execute_command - Executes a shell command using fork and execvp
- * @command: The command string to execute
- *
- * Return: Exit status of the executed command, or 1 on error
- */
 int execute_command(const char *command)
 {
     pid_t child_pid;
@@ -32,5 +26,19 @@ int execute_command(const char *command)
             args[arg_count++] = token;
             token = strtok(NULL, " ");
         }
-        args[arg_count_]()
+        args[arg_count] = NULL;
+
+        execvp(args[0], args);
+        print_message("Error executing command.\n");
+        exit(EXIT_FAILURE);
+    }
+    else
+    {
+        waitpid(child_pid, &status, 0);
+        if (WIFEXITED(status))
+            return WEXITSTATUS(status);
+        else
+            return 1;
+    }
+}
 

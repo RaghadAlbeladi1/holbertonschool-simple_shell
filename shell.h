@@ -16,6 +16,7 @@ extern char **environ;
 
 /* Function prototypes */
 void shell_loop(void);
+char *read_stream(void);
 char *read_line(void);
 char **parse_line(char *line);
 int execute(char **args);
@@ -26,5 +27,7 @@ void handle_signal(int sig);
 char **parse_line(char *line);
 void free_array(char **arr);
 char *_getpath(void);
+void free_args(char **args);
+int shell_execute(char **args);
 
 #endif /* SHELL_H */

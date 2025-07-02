@@ -11,16 +11,18 @@
 char *find_in_path(char *cmd)
 {
     char *path = _getpath();
-    char *dir, *full_path;
+    char *dir;  /* Removed unused full_path variable */
     static char buffer[1024];
 
-    if (!path)
+    if (!path || !cmd)
         return NULL;
 
     /* Make copy of PATH string */
     path = strdup(path);
-    dir = strtok(path, ":");
+    if (!path)
+        return NULL;
 
+    dir = strtok(path, ":");
     while (dir)
     {
         snprintf(buffer, sizeof(buffer), "%s/%s", dir, cmd);

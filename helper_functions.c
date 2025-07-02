@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+/* READ */
 char *read_line(void)
 {
     char *line = NULL;
@@ -17,6 +17,7 @@ char *read_line(void)
     return line;
 }
 
+/* READ */
 char *_getpath(void)
 {
     char **env = environ;

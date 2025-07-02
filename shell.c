@@ -1,41 +1,59 @@
 #include "shell.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
 
-/**
- * main - Entry point
- * Return: Always 0
- */
-int main(void)
+static void handle_eof(void)
 {
-    shell_loop();
-    return EXIT_SUCCESS;
+    if (isatty(STDIN_FILENO))
+        write(STDOUT_FILENO, "\n", 1);
 }
 
-/**
- * shell_loop - Main shell loop
- */
 void shell_loop(void)
 {
-    char *line;
-    char **args;
+    char *line = NULL;
+    char **args = NULL;
     int status = 1;
 
     while (status)
     {
-        print_prompt();
+        if (isatty(STDIN_FILENO))
+            print_prompt();
+
         line = read_line();
         if (!line)
         {
-            if (isatty(STDIN_FILENO))
-                write(STDOUT_FILENO, "\n", 1);
+            handle_eof();
             break;
         }
 
         args = parse_line(line);
-        if (args)
+        if (!args)
         {
-            status = execute(args);
-            free(args);
+            free(line);
+            line = NULL;
+            continue;
         }
-        free(line);
+
+        status = execute(args);
+
+        /* Only free if execute() didn't handle it (status != -1) */
+        if (status != -1)
+        {
+            free_args(args);
+            free(line);
+        }
+        args = NULL;
+        line = NULL;
     }
+
+    /* Final cleanup */
+    if (line) free(line);
+    if (args) free_args(args);
+}
+
+int main(void)
+{
+    shell_loop();
+    return EXIT_SUCCESS;
 }

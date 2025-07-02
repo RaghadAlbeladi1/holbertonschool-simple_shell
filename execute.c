@@ -1,50 +1,31 @@
 #include "shell.h"
+#include <sys/wait.h>
+#include <unistd.h>
 
 int execute(char **args)
 {
     pid_t pid;
     int status;
-    char *full_path = NULL;
 
-    if (!args || !args[0]) return 1;
+    if (args[0] == NULL)
+        return 1;
 
-    /* Handle builtins */
-    if (handle_builtins(args)) return 1;
+    /* Built-ins handle their own memory */
+    if (handle_builtins(args))
+        return 1;
 
-    /* Handle PATH */
-    if (strchr(args[0], '/') == NULL)
-    {
-        full_path = find_in_path(args[0]);
-        if (!full_path)
-        {
-            fprintf(stderr, "%s: 1: %s: not found\n", "hsh", args[0]);
-            return 1;
-        }
-        args[0] = full_path;
-    }
-
-    /* Fork and execute */
+    /* External commands */
     pid = fork();
-    if (pid == 0)
-    {
-        if (execve(args[0], args, environ) == -1)
-        {
-            perror("execve");
-            if (full_path) free(full_path);
-            _exit(EXIT_FAILURE);
+    if (pid == 0) {
+        if (execvp(args[0], args) == -1) {
+            perror("hsh");
         }
+        exit(EXIT_FAILURE);
+    } else if (pid < 0) {
+        perror("hsh");
+    } else {
+        waitpid(pid, &status, WUNTRACED);
     }
-    else if (pid < 0)
-    {
-        perror("fork");
-    }
-    else
-    {
-        waitpid(pid, &status, 0);
-    }
-
-    if (full_path && full_path != args[0])
-        free(full_path);
 
     return 1;
 }

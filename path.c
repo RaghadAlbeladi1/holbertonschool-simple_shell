@@ -1,67 +1,39 @@
 #include "shell.h"
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 /**
- * _getpath - Gets PATH from environ
- * Return: PATH string or NULL
- */
-char *_getpath(void)
-{
-    char **env = environ;
-    while (*env)
-    {
-        if (strncmp(*env, "PATH=", 5) == 0)
-            return (*env + 5);
-        env++;
-    }
-    return NULL;
-}
-
-/**
- * find_in_path - Finds command in PATH
+ * find_in_path - Finds a command in PATH
  * @cmd: Command to find
- * Return: Full path if found, NULL otherwise
+ * Return: Full path or NULL
  */
 char *find_in_path(char *cmd)
 {
-    char *path, *path_copy, *dir, *full_path;
-    size_t dir_len, cmd_len;
+    char *path = _getpath();
+    char *dir;  /* Removed unused full_path variable */
+    static char buffer[1024];
 
-    if (!cmd || !*cmd) return NULL;
+    if (!path || !cmd)
+        return NULL;
 
-    /* Check current directory first */
-    if (access(cmd, X_OK) == 0)
-        return strdup(cmd);
+    /* Make copy of PATH string */
+    path = strdup(path);
+    if (!path)
+        return NULL;
 
-    path = _getpath();
-    if (!path) return NULL;
-
-    path_copy = strdup(path);
-    if (!path_copy) return NULL;
-
-    cmd_len = strlen(cmd);
-    dir = strtok(path_copy, ":");
-
+    dir = strtok(path, ":");
     while (dir)
     {
-        dir_len = strlen(dir);
-        full_path = malloc(dir_len + cmd_len + 2);
-        if (!full_path)
+        snprintf(buffer, sizeof(buffer), "%s/%s", dir, cmd);
+        if (access(buffer, X_OK) == 0)
         {
-            free(path_copy);
-            return NULL;
+            free(path);
+            return buffer;
         }
-
-        sprintf(full_path, "%s/%s", dir, cmd);
-        if (access(full_path, X_OK) == 0)
-        {
-            free(path_copy);
-            return full_path;
-        }
-
-        free(full_path);
         dir = strtok(NULL, ":");
     }
 
-    free(path_copy);
+    free(path);
     return NULL;
 }

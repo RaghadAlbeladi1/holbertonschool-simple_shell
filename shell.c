@@ -1,8 +1,8 @@
 #include "shell.h"
 
 /**
- * main - Entry point of the shell
- * Return: Always 0 on success
+ * main - Shell loop
+ * Return: 0 on success
  */
 int main(void)
 {
@@ -14,6 +14,14 @@ int main(void)
 			display_prompt();
 
 		read_command(command, sizeof(command));
+
+		if (command[0] == '\0')
+			continue;
+
+
+		if (handle_builtin(command))
+			continue;
+
 		execute_command(command);
 	}
 

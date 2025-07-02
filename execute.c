@@ -1,10 +1,7 @@
 #include "shell.h"
+#include <sys/wait.h>
+#include <unistd.h>
 
-/**
- * execute - Execute a command
- * @args: Array of arguments
- * Return: 1 to continue, 0 to exit
- */
 int execute(char **args)
 {
     pid_t pid;
@@ -13,29 +10,21 @@ int execute(char **args)
     if (args[0] == NULL)
         return 1;
 
-    /* Handle built-in commands */
+    /* Built-ins handle their own memory */
     if (handle_builtins(args))
-        return -1;
+        return 1;
 
-    /* Execute external command */
+    /* External commands */
     pid = fork();
-    if (pid == 0)
-    {
-        if (execvp(args[0], args) == -1)
-        {
+    if (pid == 0) {
+        if (execvp(args[0], args) == -1) {
             perror("hsh");
-            exit(EXIT_FAILURE);
         }
-    }
-    else if (pid < 0)
-    {
+        exit(EXIT_FAILURE);
+    } else if (pid < 0) {
         perror("hsh");
-    }
-    else
-    {
-        do {
-            waitpid(pid, &status, WUNTRACED);
-        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+    } else {
+        waitpid(pid, &status, WUNTRACED);
     }
 
     return 1;

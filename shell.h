@@ -23,7 +23,7 @@ void print_prompt(void);
 int handle_builtins(char **args);
 char *find_in_path(char *cmd);
 void handle_signal(int sig);
-void handle_signal(int sig);
+char **parse_line(char *line);
 void free_array(char **arr);
 char *_getpath(void);
 

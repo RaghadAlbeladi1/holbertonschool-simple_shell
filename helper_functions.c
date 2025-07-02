@@ -2,9 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 
-/* دالة قراءة الإدخال */
 char *read_line(void)
 {
     char *line = NULL;
@@ -19,7 +17,6 @@ char *read_line(void)
     return line;
 }
 
-/* دالة الحصول على PATH */
 char *_getpath(void)
 {
     char **env = environ;

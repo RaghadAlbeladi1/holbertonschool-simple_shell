@@ -1,7 +1,10 @@
-cat > helper_functions.c << 'EOF'
 #include "shell.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
-/* read */
+/* دالة قراءة الإدخال */
 char *read_line(void)
 {
     char *line = NULL;
@@ -16,7 +19,7 @@ char *read_line(void)
     return line;
 }
 
-/*�read PATH */
+/* دالة الحصول على PATH */
 char *_getpath(void)
 {
     char **env = environ;
@@ -27,4 +30,3 @@ char *_getpath(void)
     }
     return NULL;
 }
-EOF

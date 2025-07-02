@@ -30,19 +30,20 @@ void shell_loop(void)
         if (!args)
         {
             free(line);
+            line = NULL;  // إضافة مهمة
             continue;
         }
 
         status = execute(args);
 
-        free_args(args);
-        free(line);
-    }
-}
+        /* التعديل الرئيسي هنا */
+        if (status != -1)  // إذا لم تكن execute قد حررت الذاكرة
+        {
+            free_args(args);
+            free(line);
+        }
 
-/* Entry point */
-int main(void)
-{
-    shell_loop();
-    return 0;
+        args = NULL;  // إعادة التعيين مهمة
+        line = NULL;
+    }
 }

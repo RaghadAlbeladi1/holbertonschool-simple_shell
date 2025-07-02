@@ -10,17 +10,21 @@
  */
 int handle_builtins(char **args)
 {
-    if (!args || !args[0])
+    int i;  /* Loop counter */
+
+    if (args == NULL || args[0] == NULL)
         return 0;
 
     if (strcmp(args[0], "exit") == 0) {
         exit(EXIT_SUCCESS);
     }
     else if (strcmp(args[0], "echo") == 0) {
-        int i = 1;
-        while (args[i]) {
+        i = 1;
+        while (args[i] != NULL) {
             printf("%s", args[i]);
-            if (args[++i]) printf(" ");
+            if (args[i+1] != NULL)
+                printf(" ");
+            i++;
         }
         printf("\n");
         return 1;
@@ -34,9 +38,15 @@ int handle_builtins(char **args)
  */
 void free_args(char **args)
 {
-    if (!args) return;
-    
-    int i = 0;
-    while (args[i]) free(args[i++]);
+    int i;  /* Loop counter */
+
+    if (args == NULL)
+        return;
+
+    i = 0;
+    while (args[i] != NULL) {
+        free(args[i]);
+        i++;
+    }
     free(args);
 }

@@ -15,7 +15,7 @@ int execute(char **args)
 
     /* Handle built-in commands */
     if (handle_builtins(args))
-        return 1;
+        return -1;
 
     /* Execute external command */
     pid = fork();

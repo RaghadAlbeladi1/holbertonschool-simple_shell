@@ -1,41 +1,30 @@
 #include "shell.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
-char **parse_line(char *line)
+/**
+ * read_line - Reads a line of input from stdin
+ * Return: Pointer to the input string, or NULL on failure/EOF
+ */
+char *read_line(void)
 {
-    int bufsize = BUFSIZE, pos = 0;
-    char **tokens, **new_tokens;
-    char *token;
+    char *line = NULL;
+    size_t bufsize = 0;
+    ssize_t nread;
 
-    if (!line || !*line)
-        return NULL;
+    /* Using getline for dynamic buffer allocation */
+    nread = getline(&line, &bufsize, stdin);
 
-    tokens = malloc(bufsize * sizeof(char *));
-    if (!tokens)
+    if (nread == -1)
     {
-        perror("malloc failed");
+        free(line);  /* Free if getline fails */
         return NULL;
     }
 
-    token = strtok(line, DELIM);
-    while (token)
-    {
-        tokens[pos++] = token;
+    /* Remove trailing newline if present */
+    if (nread > 0 && line[nread-1] == '\n')
+        line[nread-1] = '\0';
 
-        if (pos >= bufsize)
-        {
-            bufsize += BUFSIZE;
-            new_tokens = realloc(tokens, bufsize * sizeof(char *));
-            if (!new_tokens)
-            {
-                perror("realloc failed");
-                free(tokens);
-                return NULL;
-            }
-            tokens = new_tokens;
-        }
-
-        token = strtok(NULL, DELIM);
-    }
-    tokens[pos] = NULL;
-    return tokens;
+    return line;
 }

@@ -1,57 +1,14 @@
 #include "shell.h"
 
-/**
- * read_line - Reads user input from stdin.
- * Return: Pointer to input string.
- */
-char *read_line(void)
-{
-	char *line = NULL;
-	size_t len = 0;
-	ssize_t nread;
-
-	nread = getline(&line, &len, stdin);
-	if (nread == -1)
-	{
-		free(line);
-		return (NULL);
-	}
-	return (line);
-}
-
-/**
- * parse_line - Splits input into tokens.
- * @line: Input string to parse.
- * Return: Null-terminated array of tokens.
- */
-char **parse_line(char *line)
-{
-	int bufsize = BUFSIZE, pos = 0;
-	char **tokens = malloc(bufsize * sizeof(char *));
-	char *token;
-
-	if (!tokens)
-	{
-		perror("malloc");
-		exit(EXIT_FAILURE);
-	}
-
-	token = strtok(line, DELIM);
-	while (token)
-	{
-		tokens[pos++] = token;
-		if (pos >= bufsize)
-		{
-			bufsize += BUFSIZE;
-			tokens = realloc(tokens, bufsize * sizeof(char *));
-			if (!tokens)
-			{
-				perror("realloc");
-				exit(EXIT_FAILURE);
-			}
-		}
-		token = strtok(NULL, DELIM);
-	}
-	tokens[pos] = NULL;
-	return (tokens);
+void read_command(char *command, size_t size) {
+    if (fgets(command, size, stdin) == NULL) {
+        if (feof(stdin)) {
+            print_mes("\n");
+            exit(EXIT_SUCCESS);
+        } else {
+            print_mes("Error while reading input.\n");
+            exit(EXIT_FAILURE);
+        }
+    }
+    command[strcspn(command, "\n")] = '\0';
 }

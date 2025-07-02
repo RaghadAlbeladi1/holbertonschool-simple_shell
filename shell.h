@@ -18,5 +18,8 @@ char *read_line(void);
 char **parse_line(char *line);
 int execute(char **args);
 void print_prompt(void);
-
+/* Environment variable handling */
+extern char **environ;
+char *_getpath(void);
+char *find_in_path(char *cmd);
 #endif

@@ -1,10 +1,10 @@
 #include "shell.h"
 
 /**
- * display_prompt - Displays the shell prompt
+ * display_prompt - Displays the shell prompt **without** a newline
  */
 void display_prompt(void)
 {
-	print_message("shell$$$$$ ");
+    print_message("shell$$$$$ ", 0);
 }
 

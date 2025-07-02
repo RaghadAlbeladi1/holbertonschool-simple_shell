@@ -13,9 +13,9 @@ static void handle_eof(void)
 /* Main shell loop */
 void shell_loop(void)
 {
-    char *line = NULL;      // Buffer for user input
-    char **args = NULL;     // Array of command arguments
-    int status = 1;         // Loop control flag
+    char *line = NULL;      /* Buffer for user input */
+    char **args = NULL;     /* Array of command arguments */
+    int status = 1;         /* Loop control flag */
 
     while (status)
     {
@@ -70,8 +70,8 @@ void shell_loop(void)
 int main(void)
 {
     shell_loop();
-
-    /*
+    
+    /* 
      * No need to free environ here as it's
      * maintained by the system
      */

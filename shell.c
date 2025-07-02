@@ -1,13 +1,13 @@
 #include "shell.h"
 
-/* الدالة المساعدة */
+/* Static helper function */
 static void handle_eof(void)
 {
     if (isatty(STDIN_FILENO))
         write(STDOUT_FILENO, "\n", 1);
 }
 
-/* حلقة الشل الرئيسية */
+/* Main shell loop */
 void shell_loop(void)
 {
     char *line = NULL;
@@ -16,9 +16,10 @@ void shell_loop(void)
 
     while (status)
     {
-        print_prompt();
+        if (isatty(STDIN_FILENO))
+            print_prompt();
+
         line = read_line();
-        
         if (!line)
         {
             handle_eof();
@@ -33,12 +34,13 @@ void shell_loop(void)
         }
 
         status = execute(args);
-        free(args);
+
+        free_args(args);
         free(line);
     }
 }
 
-/* نقطة البداية */
+/* Entry point */
 int main(void)
 {
     shell_loop();

@@ -5,6 +5,9 @@
 /**
 * handle_cd - Handles the built-in 'cd' command
 * @args: Array of command arguments
+*
+* Description: Changes the current directory of the process.
+* Prints errors to stderr if directory change fails.
 */
 void handle_cd(char **args)
 {

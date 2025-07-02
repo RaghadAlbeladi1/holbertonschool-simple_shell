@@ -1,4 +1,5 @@
 #include "shell.h"
+#include <string.h>
 
 /**
  * handle_builtins - Handle built-in commands
@@ -7,6 +8,8 @@
  */
 int handle_builtins(char **args)
 {
+    int i;  /* تعريف المتغير خارج الحلقة */
+
     if (strcmp(args[0], "exit") == 0)
     {
         free_args(args);
@@ -14,7 +17,7 @@ int handle_builtins(char **args)
     }
     else if (strcmp(args[0], "echo") == 0)
     {
-        for (int i = 1; args[i] != NULL; i++)
+        for (i = 1; args[i] != NULL; i++)
         {
             printf("%s", args[i]);
             if (args[i+1] != NULL)
@@ -23,8 +26,6 @@ int handle_builtins(char **args)
         printf("\n");
         return 1;
     }
-    /* Add more built-ins here */
-
     return 0;
 }
 
@@ -34,10 +35,12 @@ int handle_builtins(char **args)
  */
 void free_args(char **args)
 {
+    int i;  /* تعريف المتغير خارج الحلقة */
+
     if (args == NULL)
         return;
 
-    for (int i = 0; args[i] != NULL; i++)
+    for (i = 0; args[i] != NULL; i++)
         free(args[i]);
 
     free(args);

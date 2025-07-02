@@ -1,7 +1,19 @@
 #include "shell.h"
 
-/* Just add this one line */
-static void handle_eof(void);
+/* Static helper functions (file-scoped) */
+static void handle_eof(void)
+{
+    if (isatty(STDIN_FILENO))
+        write(STDOUT_FILENO, "\n", 1);
+}
 
-/* Then keep all other code exactly as you had it */
-/* ... */
+/* Rest of your implementation */
+void shell_loop(void)
+{
+    /* ... */
+    if (!line) {
+        handle_eof();  // Now properly defined before use
+        break;
+    }
+    /* ... */
+}

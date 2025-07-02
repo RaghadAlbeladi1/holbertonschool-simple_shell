@@ -1,30 +1,27 @@
 #include "shell.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-/* READ */
-char *read_line(void)
-{
-    char *line = NULL;
-    size_t len = 0;
-    ssize_t nread;
 
-    nread = getline(&line, &len, stdin);
-    if (nread == -1) {
-        free(line);
-        return NULL;
-    }
-    return line;
-}
+/* Add this extern declaration for environ */
+extern char **environ;
 
-/* READ */
+/**
+ * _getpath - Gets the PATH environment variable
+ * Return: PATH string or NULL
+ */
 char *_getpath(void)
 {
     char **env = environ;
-    while (*env) {
+    char *path = NULL;
+
+    while (*env)
+    {
         if (strncmp(*env, "PATH=", 5) == 0)
-            return (*env + 5);
+        {
+            path = *env + 5;
+            break;
+        }
         env++;
     }
-    return NULL;
+    return path;
 }

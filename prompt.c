@@ -5,6 +5,6 @@
  */
 void display_prompt(void)
 {
-    print_message("shell$$$$$ ");
+    print_message("$");
 }
 

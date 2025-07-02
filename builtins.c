@@ -4,16 +4,16 @@
 /**
  * handle_builtins - Handle built-in commands
  * @args: Array of arguments
- * Return: 1 if built-in found, 0 otherwise
+ * Return: 1 if built-in found and memory should NOT be freed, 0 otherwise
  */
 int handle_builtins(char **args)
 {
-    int i;  /* تعريف المتغير خارج الحلقة */
+    int i;
 
     if (strcmp(args[0], "exit") == 0)
     {
-        free_args(args);
-        exit(EXIT_SUCCESS);
+        printf("Exiting shell...\n");  // رسالة تأكيد
+        exit(EXIT_SUCCESS);  // لا تحرير الذاكرة هنا
     }
     else if (strcmp(args[0], "echo") == 0)
     {
@@ -24,7 +24,7 @@ int handle_builtins(char **args)
                 printf(" ");
         }
         printf("\n");
-        return 1;
+        return 1;  // إشارة أن الذاكرة يجب عدم تحريرها
     }
     return 0;
 }
@@ -35,13 +35,14 @@ int handle_builtins(char **args)
  */
 void free_args(char **args)
 {
-    int i;  /* تعريف المتغير خارج الحلقة */
+    int i;
 
     if (args == NULL)
         return;
 
-    for (i = 0; args[i] != NULL; i++)
+    for (i = 0; args[i] != NULL; i++) {
         free(args[i]);
-
+        args[i] = NULL;  // إضافة مهمة للسلامة
+    }
     free(args);
 }

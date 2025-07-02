@@ -1,49 +1,50 @@
 #include "shell.h"
 
-/* Static helper function */
-static void handle_eof(void)
-{
-    if (isatty(STDIN_FILENO))
-        write(STDOUT_FILENO, "\n", 1);
+/* الدوال المساعدة */
+static void handle_eof(void) {
+    /* ... */
 }
 
-/* Main shell loop */
-void shell_loop(void)
-{
+/* دالة shell_loop الرئيسية */
+void shell_loop(void) {
     char *line = NULL;
     char **args = NULL;
     int status = 1;
 
-    while (status)
-    {
+    while (status) {
+        /* طباعة موجه الأوامر في الوضع التفاعلي */
         if (isatty(STDIN_FILENO))
             print_prompt();
 
+        /* قراءة الإدخال */
         line = read_line();
-        if (!line)
-        {
+        if (!line) {
             handle_eof();
             break;
         }
 
+        /* تحليل الإدخال إلى وسائط */
         args = parse_line(line);
-        if (!args)
-        {
+        if (!args) {
             free(line);
-            line = NULL;  // إضافة مهمة
             continue;
         }
 
+        /* تنفيذ الأمر */
         status = execute(args);
 
-        /* التعديل الرئيسي هنا */
-        if (status != -1)  // إذا لم تكن execute قد حررت الذاكرة
-        {
+        /* تحرير الذاكرة */
+        if (status != -1) {  // إذا لم يكن أمرًا مدمجًا
             free_args(args);
             free(line);
         }
-
-        args = NULL;  // إعادة التعيين مهمة
+        args = NULL;
         line = NULL;
     }
+}
+
+/* نقطة الدخول الرئيسية */
+int main(void) {
+    shell_loop();  // <-- هنا يتم استدعاء shell_loop
+    return 0;
 }

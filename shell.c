@@ -1,35 +1,43 @@
 #include "shell.h"
 
 /**
- * main - Main shell loop
+ * main - Entry point for the simple shell program
  *
- * Return: 0 on success, or exits with last command status on exit command
+ * Return: Always 0 (success), or exits with last command status
  */
 int main(void)
 {
-    char command[120];
+    char command[MAX_COMMAND_LENGTH];
     int last_status = 0;
     int builtin_status;
 
     while (1)
     {
+        /* Display prompt if in interactive mode */
         if (isatty(STDIN_FILENO))
             display_prompt();
 
-        read_command(command, sizeof(command));
+        /* Read user input */
+        if (read_command(command, sizeof(command))
+        {
+            last_status = 1;
+            continue;
+        }
 
+        /* Skip empty commands */
         if (command[0] == '\0')
             continue;
 
+        /* Handle built-in commands */
         builtin_status = handle_builtin(command);
-        if (builtin_status == -1)
+        if (builtin_status == -1)  /* Exit command */
             exit(last_status);
-
-        if (builtin_status == 1)
+        if (builtin_status == 1)   /* Handled builtin (e.g., env) */
             continue;
 
+        /* Execute external command */
         last_status = execute_command(command);
     }
 
-    return (last_status);
+    return (0);
 }

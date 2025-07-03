@@ -12,7 +12,7 @@
 
 /* Function prototypes */
 void display_prompt(void);
-ssize_t print_message(const char *msg, int newline);
+void print_message(const char *msg);
 int read_command(char *command, size_t size);
 int execute_command(const char *command);
 int handle_builtin(char *command);

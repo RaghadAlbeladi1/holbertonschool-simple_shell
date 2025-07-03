@@ -43,9 +43,9 @@ Below is a breakdown of the main files in this repository, displayed as badges w
 
 - [![getenv.c](https://img.shields.io/badge/getenv.c-yellow?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/getenv.c) → Defines a custom `_getenv`‑style function to fetch environment variable values.
 
-- [![tools.c](https://img.shields.io/badge/tools.c-orange?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/tools.c) → A collection of helper utilities for string handling, memory management and error reporting.
+- [![builtins.c](https://img.shields.io/badge/builtins.c-orange?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/tools.c) → A collection of helper utilities for string handling, memory management and error reporting.
 
-- [![command.c](https://img.shields.io/badge/command.c-red?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/command.c) → Locates executables on the `$PATH` and executes them with the provided arguments.
+- [![execute.c](https://img.shields.io/badge/execute.c-red?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/command.c) → Locates executables on the `$PATH` and executes them with the provided arguments.
 
 - [![man_1_simple_shell](https://img.shields.io/badge/man__1__simple__shell-lightgrey?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/man_1_simple_shell) → The formatted man‑page for your shell (section 1), describing usage, options and examples.
   ## Example

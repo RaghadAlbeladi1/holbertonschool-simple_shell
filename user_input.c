@@ -1,30 +1,31 @@
 #include "shell.h"
 
 /**
- * read_command - Reads a command from standard input
- * @command: Buffer to store the command
- * @size: Size of the buffer
+ * read_command - Reads a command from stdin
+ * @command: Buffer to store command
+ * @size: Size of buffer
+ *
+ * Return: 0 on success, -1 on failure
  */
-void read_command(char *command, size_t size)
+int read_command(char *command, size_t size)
 {
-	ssize_t nread;
-	char *line = NULL;
-	size_t len = 0;
+    ssize_t read;
 
-	nread = getline(&line, &len, stdin);
-	if (nread == -1)
-	{
-		print_message("\n");
-		free(line);
-		exit(EXIT_SUCCESS);
-	}
+    read = getline(&command, &size, stdin);
+    if (read == -1)
+    {
+        if (feof(stdin))
+        {
+            print_message("\n");
+            exit(EXIT_SUCCESS);
+        }
+        else
+        {
+            perror("read_command");
+            return (-1);
+        }
+    }
 
-	if (nread > 0 && line[nread - 1] == '\n')
-		line[nread - 1] = '\0';
-
-	strncpy(command, line, size - 1);
-	command[size - 1] = '\0';
-
-	free(line);
+    command[read - 1] = '\0'; /* Remove newline */
+    return (0);
 }
-

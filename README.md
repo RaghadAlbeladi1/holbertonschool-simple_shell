@@ -38,7 +38,7 @@ Below is a breakdown of the main files in this repository, displayed as badges w
 
 - [![man_1_simple_shell](https://img.shields.io/badge/man__1__simple__shell-lightgrey?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/man_1_simple_shell) → The formatted man‑page for your shell (section 1), describing usage, options and examples.
 
-- [![AUTHORS](https://img.shields.io/badge/AUTHORS-FFD700?style=flat-square)](./AUTHORS) → Lists all contributors with contact information.
+- [![Authors](https://img.shields.io/badge/Authors-FFD700?style=flat-square)](./Authors) → Lists all contributors with contact information.
   
 ## Requirements
 - GCC version 9.4.0 or newer (currently using 11.4.0 on Ubuntu 22.04)  

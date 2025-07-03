@@ -5,9 +5,22 @@
 
 # C - Simple Shell 🎓
 ## Description
-**Simple Shell** is an implementation of our own simplified version of a UNIX command line interpreter written in C. The objective of this project is to build a shell from scratch that mimics basic behaviors of traditional UNIX shells. While limited in functionality, it applies the core concepts of process creation, command execution, environment variables, and input handling. In simple terms, a shell is a program that takes commands typed by the user and passes them to the operating system for execution. Our shell supports interactive and non-interactive modes, uses `execve` to execute commands found in the `PATH`, and includes basic built-ins like `exit` and `env`, excluding advanced features such as piping, redirection, or cursor movement.
+**Simple Shell** is a custom UNIX command line interpreter implemented in C, developed as part of the Holberton School curriculum. This collaborative project between [**Raghad Albeladi**](https://github.com/RaghadAlbeladi1), [**Najwa Aljunaidel**](https://github.com/NajwaAljunaidel), and [**Bushra Alotaibi**](https://github.com/Bushra2252) replicates core functionalities of traditional shells like `bash` or `sh`, with a focus on:
 
-This project was collaboratively developed by [**Raghad Albeladi**](https://github.com/RaghadAlbeladi1), [**Najwa Aljunaidel**](https://github.com/NajwaAljunaidel), [**Bushra Alotaibi**](https://github.com/Bushra2252), as part of the Holberton School curriculum.
+- **Process Management**: Handles command execution using `fork`, `execve`, and `wait`.
+- **Environment Variables**: Supports `env` and custom `_getenv` for variable lookup.
+- **Built-ins**: Implements essential commands like `exit` and `env`.
+- **Modes**: Works in both **interactive** (user input) and **non-interactive** (script/file input) modes.
+
+### Key Limitations (Scope):
+❌ **No** piping (`|`) or redirection (`>`, `<`).  
+❌ **No** advanced features like aliases, job control, or signal handling.  
+❌ **No** wildcard expansion (e.g., `*.c`).  
+
+### Technical Stack:
+- **Language**: C (GNU89 standard).  
+- **System Calls**: `execve`, `fork`, `waitpid`, `getline`, etc.  
+- **Testing**: Valgrind for memory leaks, Betty for style compliance.
 
 ## Project Files
 

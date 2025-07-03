@@ -8,23 +8,25 @@
  */
 int handle_builtin(char *command)
 {
-	char *cmd = strtok(command, " ");
+    char *cmd = strtok(command, " ");
+    int i = 0;
+    extern char **environ;
 
-	if (!cmd)
-		return (0);
+    if (!cmd)
+        return (0);
 
-	if (strcmp(cmd, "exit") == 0)
-		return (-1);
+    if (strcmp(cmd, "exit") == 0)
+        return (-1);
 
-	if (strcmp(cmd, "env") == 0)
-	{
-		extern char **environ;
-		int i = 0;
+    if (strcmp(cmd, "env") == 0)
+    {
+        while (environ[i])
+        {
+            print_message(environ[i], 1);
+            i++;
+        }
+        return (1);
+    }
 
-		while (environ[i])
-			print_message(environ[i++], 1);
-		return (1);
-	}
-
-	return (0);
+    return (0);
 }

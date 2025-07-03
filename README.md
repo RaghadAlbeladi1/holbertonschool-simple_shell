@@ -9,22 +9,48 @@
 
 This project was collaboratively developed by [**Raghad Albeladi**](https://github.com/RaghadAlbeladi1), [**Najwa Aljunaidel**](https://github.com/NajwaAljunaidel), [**Bushra Alotaibi**](https://github.com/Bushra2252), as part of the Holberton School curriculum.
 
-
 ## Requirements
-- GCC version 9.4.0 or newer (crrently using 11.4.0 on Ubuntu 22.04) 
-- Operating System: **Ubuntu 22.04 LTS** (sandbox environment) 
+- GCC version 9.4.0 or newer (currently using 11.4.0 on Ubuntu 22.04)  
+- Operating System: **Ubuntu 22.04 LTS** (sandbox environment)  
 - `make` utility (optional but recommended)
+
 ## Compilation / Installation
-Compilation
-All files are compiled on Ubuntu 22.04 LTS using:
+**The code should be compiled this way:**
 ```bash
-gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
+gcc -Wall -Werror -Wextra -pedantic -std=gnu89 -Wno-format *.c -o hsh
 ```
+**What does it do?**
+This command is used to strictly compile all C files in our project. It helps ensure the code is:
+
+✅ Clean and free from common bugs
+
+✅ Following C89 coding standards
+
+✅ Compiled with any warning treated as an error
+
 ### 🔽 Clone the Repository
 ```bash
 git clone https://github.com/RaghadAlbeladi1/holbertonschool-simple_shell.git
 cd holbertonschool-simple_shell
 ```
+## Project Files
+
+Below is a breakdown of the main files in this repository, displayed as badges with descriptions:
+
+- [![shell.h](https://img.shields.io/badge/shell.h-blue?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/shell.h)  → Contains all function prototypes, macros and necessary header includes for our shell.
+
+- [![shell.c](https://img.shields.io/badge/shell.c-green?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/shell.c) → Implements the REPL loop: reads user input, parses it, and dispatches commands.
+
+- [![getenv.c](https://img.shields.io/badge/getenv.c-yellow?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/getenv.c) → Defines a custom `_getenv`‑style function to fetch environment variable values.
+
+- [![tools.c](https://img.shields.io/badge/tools.c-orange?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/tools.c) → A collection of helper utilities for string handling, memory management and error reporting.
+
+- [![command.c](https://img.shields.io/badge/command.c-red?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/command.c) → Locates executables on the `$PATH` and executes them with the provided arguments.
+
+- [![man_1_simple_shell](https://img.shields.io/badge/man__1__simple__shell-lightgrey?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/man_1_simple_shell) → The formatted man‑page for your shell (section 1), describing usage, options and examples.
+
+
+
 
 
 

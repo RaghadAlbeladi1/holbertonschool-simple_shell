@@ -152,6 +152,13 @@ $ valgrind ./hsh
 - No invalid reads or writes occurred.  
 - Your shell cleans up all resources before exiting.
 
+## Authors 
+
+- **Raghad Albeladi**  [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/RaghadAlbeladi1)
+- **Najwa Aljunaidel**  [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/NajwaAljunaidel)
+ - **Bushra Alotaibi**  [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/Bushra2252)
+
+ 
 
 
 

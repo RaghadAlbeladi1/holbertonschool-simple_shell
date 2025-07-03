@@ -1,51 +1,46 @@
-#define _GNU_SOURCE
-#include "main.h"
+#include "shell.h"
 
+int last_status = 0;
 /**
-* main - entry point
-* Return: 0 on success
-*/
-
+ * main - Entry point for the simple shell
+ *
+ * Return: Exit status of the shell
+ */
 int main(void)
 {
 	char *line = NULL;
-	char *args[MAX_ARGS];
-	size_t lineSize = 0;
-	ssize_t bytesRead;
+	char **args = NULL;
+	size_t len = 0;
+	ssize_t read;
+	int status = 1;
+	int interactive_mode = isatty(STDIN_FILENO) && isatty(STDERR_FILENO);
+	int builtin_status;
 
-	while (1)
+	while (1) /* Infinite loop, breaks only on EOF or exit */
 	{
-		if (isatty(STDIN_FILENO))
-		{
-			printf("%s/%s$ ", getenv("USER"), getenv("PWD"));
-			fflush(stdout);
-		}
-		bytesRead = getline(&line, &lineSize, stdin);
-		if (bytesRead == EOF)
-		{
-			{
-				free(line);
-				exit(EXIT_SUCCESS);
-			}
-			free(line);
-			perror("Error");
-			continue;
+		if (interactive_mode)
+			display_prompt(); /* Display the prompt ("$ ") */
 
-		}
-		line[bytesRead - 1] = '\0';
-		tokenize(line, args, MAX_ARGS);
-		tokenize(line, args, MAX_ARGS);
-		if (args[0] != NULL)
+		read = getline(&line, &len, stdin); /* Read user input */
+
+		if (read == -1)
+			break;
+
+		args = split_line(line); /* Split the input line*/
+
+		/* === Check for built-in commands === */
+		builtin_status = handle_builtin(args, line);
+		if (builtin_status == 0 || builtin_status == 1)
 		{
-			if (strcmp(args[0], "exit") == 0)
-			{
-				free(line);
-				exit(EXIT_SUCCESS);
-			}
-			exec(args);
+			status = builtin_status; /* we stock the good return code*/
+			free(args);
+			continue;
 		}
-		memset(args, 0, sizeof(args));
+
+		status = execute_command(args);/* === External command execution === */
+		last_status = status;
+		free(args);
 	}
 	free(line);
-	return (0);
+	return (status);
 }

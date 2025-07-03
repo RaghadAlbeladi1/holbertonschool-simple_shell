@@ -1,24 +1,19 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-/*Librairies */
+#define MAX_ARGS 1024
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <sched.h>
-#include <sys/types.h>
+#include <sys/stat.h>
 #include <sys/wait.h>
+#include <sys/types.h>
 
+void exec(char **args);
 extern char **environ;
-
-/* Prototypes */
-
-void exec(char **args, char *input);
-void tokenize(char *input, char *args[]);
-void handlePath(const char* path, int length);
-void printEnv(void);
-char *handle_path(char *input);
+void tokenize(char *line, char *args[], size_t max_args);
+char *find_path(char *command);
 
 #endif

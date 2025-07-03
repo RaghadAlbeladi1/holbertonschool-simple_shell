@@ -1,43 +1,39 @@
-#include "shell.h"
+#define _GNU_SOURCE
+
+#include "main.h"
 
 /**
- * main - main fucntion to launch our simple shell
- * Return: 0 at the end
+ * main - main function for the shell
+ * Return: 0 on success
  */
 
 int main(void)
 {
-	char *input, **args;
+	char *input = NULL;
+	char *args[64] = { NULL };
+	size_t inputSize = 0;
+	ssize_t inputRead;
 
-	signal(SIGINT, handle_sigint);
 	while (1)
 	{
-		prompt();
-		input = read_input();
-		if (!input)
-			break;
-		if (strcmp(input, "\n") == 0 || strlen(input) == 0)
+		if (isatty(STDIN_FILENO))
 		{
-			free(input);
-			continue;
+			printf("$ ");
+			fflush(stdout);
 		}
-		if (input[strlen(input) - 1] == '\n')
-			input[strlen(input) - 1] = '\0';
 
-		if (strcmp(input, "exit") == 0)
+		inputRead = getline(&input, &inputSize, stdin);
+		if (inputRead == EOF)
 		{
 			free(input);
 			exit(0);
 		}
-		args = split_string(input);
-		if (!args)
-		{
-			free(input);
-			continue;
-		}
-		execute_command(args);
-		free(input);
-		free_ressources(args);
+
+		if (inputRead > 0 && input[inputRead - 1] == '\n')
+			input[inputRead - 1] = '\0';
+
+		tokenize(input, args);
 	}
-return (0);
+	free(input);
+	return (0);
 }

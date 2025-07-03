@@ -3,7 +3,7 @@
 /**
  * main - Main shell loop
  *
- * Return: 0 on success, or exits with last command status on exit
+ * Return: 0 on success, or exits with last command status on exit command
  */
 int main(void)
 {
@@ -31,6 +31,5 @@ int main(void)
         last_status = execute_command(command);
     }
 
-    return (0);
+    return (last_status);
 }
-

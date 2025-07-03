@@ -48,6 +48,33 @@ Below is a breakdown of the main files in this repository, displayed as badges w
 - [![command.c](https://img.shields.io/badge/command.c-red?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/command.c) → Locates executables on the `$PATH` and executes them with the provided arguments.
 
 - [![man_1_simple_shell](https://img.shields.io/badge/man__1__simple__shell-lightgrey?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/man_1_simple_shell) → The formatted man‑page for your shell (section 1), describing usage, options and examples.
+  ## Example
+```bash
+$ ./hsh
+simple_shell$ echo "Hello, World!"
+Hello, World!
+simple_shell$ ls -1
+AUTHORS
+README.md
+built-ins.c
+execute.c
+hbtn_ls
+hsh
+prompt.c
+shell.c
+shell.h
+tools.c
+user_input.c
+simple_shell$ exit
+$
+```
+**In this session:**
+- Started the shell with `./hsh`
+- Ran a simple `echo` command
+- Listed directory contents with `ls -1`
+- Exited cleanly with `exit`
+
+
 
 
 

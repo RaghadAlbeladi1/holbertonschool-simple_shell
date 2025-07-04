@@ -53,6 +53,22 @@ Below is a breakdown of the main files in this repository, displayed as badges w
   
 - [![Authors](https://img.shields.io/badge/Authors-FFD700?style=flat-square)](./Authors) → Lists all contributors with contact information. _(done with Raghad)_
 
+## Function Reference
+
+A concise list of the core functions and what they do:
+
+| Function                                  | Purpose                                                          |
+|-------------------------------------------|------------------------------------------------------------------|
+| `display_prompt(void)`                    | Print the `$ ` prompt and flush stdout.                          |
+| `char **split_line(char *line)`           | Split an input line on whitespace into a NULL‑terminated array.  |
+| `int handle_builtin(char **args, char *line)` | Detect and execute built‑in commands (`exit`, `env`, `pwd`, `cd`). |
+| `void printenv(void)`                     | Print all environment variables from `environ[]`.               |
+| `char *my_getenv(const char *name)`       | Custom `getenv`: return the value of `name` from the environment.|
+| `char *find_path(char *command)`          | Search `$PATH` (or use literal path) for an executable; return full path or `NULL`. |
+| `int run_exec(char *path, char **args)`   | Fork and call `execve()` on `path`, wait for child, return its exit status. |
+| `int execute_command(char **args)`        | High‑level wrapper: resolve command via `find_path` and invoke `run_exec`, handling errors. |
+| `void handle_cd(char **args)`             | Implement `cd` behavior (`cd`, `cd -`, default to `$HOME`, update `OLDPWD`). |
+| `int main(void)`                          | Entry point: detect mode, loop on input, dispatch to built‑ins or external commands, clean up. |
 
   ## Flowchart:
 ![photo_2025-07-04_13-19-51](https://github.com/user-attachments/assets/073b0008-55c6-4496-8732-4dd83bcff498)

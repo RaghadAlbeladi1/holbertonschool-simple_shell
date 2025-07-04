@@ -1,6 +1,6 @@
 #include "shell.h"
 
-
+int last_status = 0;
 /**
  * main - Entry point for the simple shell
  *
@@ -9,7 +9,6 @@
 int main(void)
 {
 	char *line = NULL;
-	int last_status = 0;
 	char **args = NULL;
 	size_t len = 0;
 	ssize_t read;

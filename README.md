@@ -184,25 +184,14 @@ $ valgrind ./hsh
 - No invalid reads or writes occurred.  
 - Your shell cleans up all resources before exiting.
 
+  
+<img
+  src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExcnBpbzl4ZGM4eTNmeGJpemdqMHplY3U3YnFoZHl6Y3V1bzd2ZTExaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/sbVmgbmgvwwKL61DKG/giphy.gif"
+  alt="Demo GIF"
+  width="200"
+  align="left" />
 
 ## Authors 
-<img
-src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGExOWk0bzkwcWVhbTUzYzNwM3cyZGU5dGtva2U4dDNiY3ozamtodCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9dHM/KqS8EmS7OWLUxGyUkf/giphy.gif"
-  align="right"
-  width="200"
-  alt="Shell Demo" />  
-  
 - **Raghad Albeladi**  [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/RaghadAlbeladi1)
 - **Najwa Aljunaidel**  [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/NajwaAljunaidel)
  - **Bushra Alotaibi**  [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/Bushra2252)
-
-
-<p align="center">
-  <img
-src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExdTllY2dpYTB6dDBhdXhwZ3dwajRxeWUwM204bHR2MW96YXFqNTVkYSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/trjPWulWl8Vs0SrKOj/giphy.gif"
-    alt="Shell Demo"
-    width="300" />
-</p>
-
-
-

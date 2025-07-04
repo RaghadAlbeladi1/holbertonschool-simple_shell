@@ -35,22 +35,23 @@
 
 ## Project Files
 
-Below is a breakdown of the main files in this repository, displayed as badges with descriptions:
+Below is a breakdown of the main files in this repository, displayed as badges with descriptions and who implemented each:
 
-- [![shell.h](https://img.shields.io/badge/shell.h-blue?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/shell.h)  → Contains all function prototypes, macros and necessary header includes for our shell.
+- [![shell.h](https://img.shields.io/badge/shell.h-blue?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/shell.h) → Contains all function prototypes, macros and necessary header includes for our shell. _(done with Najwa)_
 
-- [![shell.c](https://img.shields.io/badge/shell.c-green?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/shell.c) → Implements the REPL loop: reads user input, parses it, and dispatches commands.
+- [![shell.c](https://img.shields.io/badge/shell.c-green?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/shell.c) → Implements the REPL loop: reads user input, parses it, and dispatches commands. _(done with Najwa)_
 
-- [![getenv.c](https://img.shields.io/badge/getenv.c-yellow?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/getenv.c) → Defines a custom `_getenv`‑style function to fetch environment variable values.
+- [![getenv.c](https://img.shields.io/badge/getenv.c-yellow?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/getenv.c) → Defines a custom `_getenv`‑style function to fetch environment variable values. _(done with Raghad)_
 
-- [![builtins.c](https://img.shields.io/badge/builtins.c-orange?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/tools.c) → A collection of helper utilities for string handling, memory management and error reporting.
+- [![builtins.c](https://img.shields.io/badge/builtins.c-orange?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/tools.c) → A collection of helper utilities for string handling, memory management and error reporting. _(done with Bushra)_
 
-- [![execute.c](https://img.shields.io/badge/execute.c-red?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/command.c) → Locates executables on the `$PATH` and executes them with the provided arguments.
+- [![execute.c](https://img.shields.io/badge/execute.c-red?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/command.c) → Locates executables on the `$PATH` and executes them with the provided arguments. _(done with Bushra)_
 
-- [![man_1_simple_shell](https://img.shields.io/badge/man__1__simple__shell-lightgrey?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/man_1_simple_shell) → The formatted man‑page for your shell (section 1), describing usage, options and examples.
+- [![man_1_simple_shell](https://img.shields.io/badge/man__1__simple__shell-lightgrey?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/man_1_simple_shell) → The formatted man‑page for your shell (section 1), describing usage, options and examples. _(done with Raghad)_
 
-- [![Authors](https://img.shields.io/badge/Authors-FFD700?style=flat-square)](./Authors) → Lists all contributors with contact information.
-
+- [![README.md](https://img.shields.io/badge/README.md-lightgreen?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/README.md)→ This file: project Description,Comilation /installation, Requiremnts, Testing and Examples. _(done with Raghad)_
+  
+- [![Authors](https://img.shields.io/badge/Authors-FFD700?style=flat-square)](./Authors) → Lists all contributors with contact information. _(done with Raghad)_
 
 
   ## Flowchart:

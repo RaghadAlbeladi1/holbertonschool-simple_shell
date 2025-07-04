@@ -1,36 +1,38 @@
 #include "shell.h"
 
+int last_status = 0;
 /**
- * main - Entry point for simple shell
- * Handles both interactive and non-interactive modes
+ * main - Entry point for the simple shell
  *
- * Return: Final shell exit status
+ * Return: Exit status of the shell
  */
 int main(void)
 {
 	char *line = NULL;
 	char **args = NULL;
 	size_t len = 0;
+	ssize_t read;
 	int status = 1;
-	int interactive_mode = isatty(STDIN_FILENO);
+	int interactive_mode = isatty(STDIN_FILENO) && isatty(STDERR_FILENO);
 	int builtin_status;
 
-	while (1)
+	while (1) /* Infinite loop, breaks only on EOF or exit */
 	{
 		if (interactive_mode)
-			display_prompt();
+			display_prompt(); /* Display the prompt ("$ ") */
 
-		if (getline(&line, &len, stdin) == -1)
+		read = getline(&line, &len, stdin); /* Read user input */
+
+		if (read == -1)
 			break;
 
-		args = split_line(line);
-		if (!args)
-			continue;
+		args = split_line(line); /* Split the input line*/
 
+		
 		builtin_status = handle_builtin(args, line);
-		if (builtin_status >= 0)
+		if (builtin_status == 0 || builtin_status == 1)
 		{
-			status = builtin_status;
+			status = builtin_status; 
 			free(args);
 			continue;
 		}
@@ -39,7 +41,6 @@ int main(void)
 		last_status = status;
 		free(args);
 	}
-
 	free(line);
 	return (status);
 }

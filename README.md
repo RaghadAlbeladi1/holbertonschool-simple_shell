@@ -22,6 +22,17 @@
 - **System Calls**: `execve`, `fork`, `waitpid`, `getline`, etc.  
 - **Testing**: Valgrind for memory leaks, Betty for style compliance.
 
+### Tasks
+
+* Task 0. README, man_1_simple_shell, AUTHORS
+* Task 1. Betty would be proud
+* Task 2. Simple shell 0.1
+* Task 3. Simple shell 0.2
+* Task 4. Simple shell 0.3
+* Task 5. Simple shell 0.4
+* Task 6. Simple shell 1.0
+* Task 7. What happens when you type ls -l in the shell
+
 ## Project Files
 
 Below is a breakdown of the main files in this repository, displayed as badges with descriptions:
@@ -39,7 +50,12 @@ Below is a breakdown of the main files in this repository, displayed as badges w
 - [![man_1_simple_shell](https://img.shields.io/badge/man__1__simple__shell-lightgrey?style=flat-square)](https://github.com/hedjouj/holbertonschool-simple_shell/blob/main/man_1_simple_shell) → The formatted man‑page for your shell (section 1), describing usage, options and examples.
 
 - [![Authors](https://img.shields.io/badge/Authors-FFD700?style=flat-square)](./Authors) → Lists all contributors with contact information.
-  
+
+
+
+  ## Flowchart:
+![photo_2025-07-04_13-19-51](https://github.com/user-attachments/assets/073b0008-55c6-4496-8732-4dd83bcff498)
+ 
 ## Requirements
 - GCC version 9.4.0 or newer (currently using 11.4.0 on Ubuntu 22.04)  
 - Operating System: **Ubuntu 22.04 LTS** (sandbox environment)  
@@ -77,6 +93,7 @@ env
 exit
 You can also press Ctrl + D to exit the shell.
 ```
+
   ## Example
 ```bash
 $ ./hsh
@@ -167,17 +184,25 @@ $ valgrind ./hsh
 - No invalid reads or writes occurred.  
 - Your shell cleans up all resources before exiting.
 
-## Authors 
 
+## Authors 
+<img
+src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGExOWk0bzkwcWVhbTUzYzNwM3cyZGU5dGtva2U4dDNiY3ozamtodCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9dHM/KqS8EmS7OWLUxGyUkf/giphy.gif"
+  align="right"
+  width="200"
+  alt="Shell Demo" />  
+  
 - **Raghad Albeladi**  [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/RaghadAlbeladi1)
 - **Najwa Aljunaidel**  [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/NajwaAljunaidel)
  - **Bushra Alotaibi**  [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github)](https://github.com/Bushra2252)
 
- 
 
-
-
-
+<p align="center">
+  <img
+src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExdTllY2dpYTB6dDBhdXhwZ3dwajRxeWUwM204bHR2MW96YXFqNTVkYSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/trjPWulWl8Vs0SrKOj/giphy.gif"
+    alt="Shell Demo"
+    width="300" />
+</p>
 
 
 

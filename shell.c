@@ -1,6 +1,6 @@
 #include "shell.h"
 
-int last_status = 0;
+
 /**
  * main - Entry point for the simple shell
  *
@@ -9,6 +9,7 @@ int last_status = 0;
 int main(void)
 {
 	char *line = NULL;
+	int last_status = 0;
 	char **args = NULL;
 	size_t len = 0;
 	ssize_t read;
@@ -28,11 +29,11 @@ int main(void)
 
 		args = split_line(line); /* Split the input line*/
 
-		
+
 		builtin_status = handle_builtin(args, line);
 		if (builtin_status == 0 || builtin_status == 1)
 		{
-			status = builtin_status; 
+			status = builtin_status;
 			free(args);
 			continue;
 		}
